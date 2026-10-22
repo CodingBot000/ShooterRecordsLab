@@ -134,3 +134,7 @@ aws ssm start-session \
 - SQL Server `rds.force_ssl`은 **static**이므로 parameter group의 `apply_method = "pending-reboot"`를 사용한다. 생성/변경 뒤 실제 TLS 적용과 필요 재부팅을 별도 승인·검증해야 한다. [공식 SSL 지침](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/SQLServer.Concepts.General.SSL.Using.html).
 - 실제 생성 전 해당 계정의 정확한 SQL Server 2022 build/class/gp3/암호화/AZ 주문 가능성, 선택 AMI의 x86_64·SSM Agent·EBS 최소 크기와 네트워크·쿼터를 확인한다. 가격표와 모의 테스트는 이를 보장하지 않는다.
 - Terraform state/plan 보호·보관/암호화/잠금, 백업 기간·최종 snapshot/EBS/secret 정리·종료 시점을 확정한 뒤 계획을 검토하고 별도 실행 승인을 받는다.
+
+## 11. 후속 실환경 검증
+
+사용자가 확정한 검증 범위에서 EC2 Docker/private RDS/SSM·TLS·JWT·SQL 제약/동시성/SP·실행 계획·장애 복구를 실제 확인했다. [실환경 보고서](aws-validation.md)에 소스 버전과 결과를 기록했다. 위 초안/준비 섹션의 미실행 표시는 당시 상태이며, 실행 결과와 구분해서 읽는다. 실제 계정·주소·자원 식별자·키·원본 상태/계획/접속 로그는 공개하지 않는다.

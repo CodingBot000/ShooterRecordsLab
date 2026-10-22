@@ -2,7 +2,7 @@
 
 가상의 플레이어·경기 데이터를 다루는 개인 학습용 REST API입니다. 넥슨 공식 프로젝트 및 실제 게임 계정·기록과 무관합니다. 프론트엔드는 구현하지 않습니다.
 
-.NET 10 / ASP.NET Core Controllers / EF Core 10 / SQL Server 2022를 사용합니다. P0~P2의 로컬 코드·검증을 완료했고, 실제 private AWS RDS SQL Server Express 연결은 P3의 비용·구성 승인 후 진행합니다. API의 EC2 Docker 배포는 P5입니다.
+.NET 10 / ASP.NET Core Controllers / EF Core 10 / SQL Server 2022를 사용합니다. AWS EC2 Docker API와 private RDS SQL Server Express에서 실제 배포·DB·인증·동시성·장애 복구 검증을 수행했습니다. [실환경 검증 보고서](docs/aws-validation.md)와 [기계 판독 결과](docs/validation/aws-validation/report.json)에 검증 코드 버전과 결과를 기록했습니다.
 
 ## macOS 사전 조건
 
@@ -31,13 +31,13 @@ curl -i http://127.0.0.1:5080/health/ready
 curl -i http://127.0.0.1:5080/openapi/v1.json
 ```
 
-개발 프로필은 `127.0.0.1:5080`에 바인딩합니다. DB 없이 live는 200, ready는 503입니다. OpenAPI는 Development에서만 노출합니다. 실제 데이터 API는 SQL Server 연결이 필요하며 P1의 메모리 Fake는 현재 **테스트 프로젝트에만** 있습니다. 쓰기 API는 모든 환경에서 JWT와 `scope=matches.write` 권한이 필요합니다.
+개발 프로필은 `127.0.0.1:5080`에 바인딩합니다. DB 없이 live는 200, ready는 503입니다. OpenAPI는 Development에서만 노출합니다. 데이터 API 실행에는 본인의 SQL Server 연결 설정이 필요하며 P1의 메모리 Fake는 **테스트 프로젝트에만** 있습니다. 쓰기 API는 모든 환경에서 JWT와 `scope=matches.write` 권한이 필요합니다.
 
 DB 연결 문자열 키는 `ConnectionStrings:ShooterRecords`입니다. P3 승인 후 .NET user-secrets 또는 외부 환경 설정으로 제공하며 실제 값을 파일/터미널 기록/로그에 노출하지 않습니다. 서버·DB, TLS 암호화·서버 인증서 검증, MARS 비활성화를 검사합니다. SSM 터널은 `HostNameInCertificate`에 실제 승인된 RDS 인증서 호스트명을 사용해야 합니다. [접속·승인 지침](docs/aws-deployment.md)을 먼저 확인합니다.
 
 ## API 사용 예
 
-P3에서 승인된 Dev/Test DB에 Migration과 `infra/scripts/seed-demo.sql`을 적용한 뒤 사용할 예입니다. **이 명령의 성공은 현재 실DB에서 검증되지 않았습니다.** 앱 기동 중 Migration/seed는 실행하지 않습니다.
+P3에서 승인된 Dev/Test DB에 Migration과 `infra/scripts/seed-demo.sql`을 적용한 뒤 사용할 예입니다. 명령의 요청·응답 동작은 실환경 보고서의 소스 버전에서 검증했습니다. 재현 시 본인의 승인된 DB·인증 구성이 필요합니다. 앱 기동 중 Migration/seed는 실행하지 않습니다.
 
 ```bash
 curl -i http://127.0.0.1:5080/api/players/11111111-1111-1111-1111-111111111111
@@ -89,9 +89,9 @@ dotnet ef migrations has-pending-model-changes \
 - [개발계획](docs/development-plan.md), [아키텍처](docs/architecture.md), [의사결정](docs/decisions.md), [AWS 지침](docs/aws-deployment.md).
 - `docs/init/`: 로컬에만 보존하는 초기 원본으로 Git에서는 제외합니다. GitHub에는 갱신한 `docs/` 운영 문서와 에이전트 작업·검증 기록을 포함합니다. 저장소 clone 후 빌드/테스트에는 초기 원본이 필요하지 않습니다.
 
-## P3 견적·인프라 초안 (생성 전)
+## 인프라 코드와 비용 검토
 
-사용자가 서울 리전의 비용·IaC 준비를 선택했습니다. [견적·미정 결정 목록](docs/aws-cost-estimate.md)과 [Terraform 초안](infra/terraform/README.md)을 확인합니다. 월 예산·계정/프로파일·사양·보존/정리와 실제 실행은 아직 확정하지 않았습니다.
+초기 [비용 비교](docs/aws-cost-estimate.md), [Terraform 구성](infra/terraform/README.md), 후속 [실환경 검증 결과](docs/aws-validation.md)를 구분합니다. 다른 계정에서 재현할 때는 본인의 사양·비용·보존 정책과 실행 범위를 다시 확인해야 합니다. 실제 계정 입력과 비밀은 저장소에 포함하지 않습니다.
 
 ```bash
 export PATH="$HOME/.local/share/shooterrecords-terraform:$PATH"
@@ -105,4 +105,4 @@ python3 infra/scripts/estimate-aws-cost.py
 
 `infra/docker/Dockerfile`은 버전/digest를 고정한 Linux x86_64 빌드·비root 런타임과 AWS RDS 인증서 검증을 구성합니다. 키·토큰·DB 연결 문자열은 이미지/소스에 포함하지 않습니다. `Authentication:Jwt` 설정은 외부 비밀 저장소에서 주입하며, 검증 전용 Staging 토큰은 Production 인증 서버를 대신하지 않습니다. 공개 JWT 발급 API는 제공하지 않습니다.
 
-클라우드 검증 보고서는 `infra/scripts/export-validation-evidence.py`의 허용된 필드만 공개합니다. 원본 AWS 출력·계정·주소·자원 ID·비밀·Terraform state/plan은 Git에 넣지 않습니다. 실제 실행 결과는 완료 후 검증 기록에 반영합니다.
+클라우드 검증 보고서는 `infra/scripts/export-validation-evidence.py`의 허용된 필드만 공개합니다. 원본 AWS 출력·계정·주소·자원 ID·비밀·Terraform state/plan은 Git에 넣지 않습니다. 실제 실행 결과는 [실환경 보고서](docs/aws-validation.md)에 기록했습니다.

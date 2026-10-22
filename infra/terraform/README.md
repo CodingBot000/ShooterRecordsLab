@@ -1,6 +1,6 @@
-# P3 Terraform 초안 — 리소스 생성 미승인
+# P3/P5 Terraform 구성
 
-서울 리전의 코드·검토용 초안이다. 사용자에게 승인받은 것은 견적·IaC 준비이며 AWS 리소스/IAM/Budget 이메일/DB를 생성·변경하지 않았다. 비용·미정 입력은 [견적과 결정 목록](../../docs/aws-cost-estimate.md)을 먼저 확인한다.
+서울 리전의 private EC2/RDS 구성과 실제 검증에 사용한 코드다. 초기 비용 비교와 후속 승인/실행 결과는 [견적](../../docs/aws-cost-estimate.md), ADR-010 이후 결정, [실환경 보고서](../../docs/aws-validation.md)를 구분해 확인한다. 이 코드 자체는 다른 계정/새 실행의 사전 승인이 아니다.
 
 ## 포함한 변경 제안
 
@@ -9,7 +9,7 @@
 - SQL Server 2022 Express Single-AZ private RDS. EC2와 같은 AZ. 강제 TLS, 암호화 storage, 고유 parameter/subnet group. Dev/Test 논리 DB는 이후 별도 승인된 SQL 관리 작업으로 생성하며 `db_name`을 지정하지 않는다.
 - master password는 RDS가 Secrets Manager에서 생성/관리한다. Terraform이 비밀번호를 읽거나 `random_password`/평문 `password`를 state에 넣지 않는다. EC2 role은 SSM Core만 부여하고 master secret 접근·ECR·배포 권한은 추가하지 않는다.
 - 계정 범위 월 COST Budget 실제/예측 100% 초과 이메일 알림 제안. 월 한도·수신자는 필수 입력이다. 알림은 강제 과금 차단이 아니다. 현재 알림 이메일을 설정하거나 보내지 않았다.
-- RDS prevent_destroy/deletion protection, 최종 snapshot 필수·자동 백업 보존 제안. 백업 기간은 필수 입력. EC2 종료 시 root EBS 삭제는 학습용 초안 제안으로, 실제 삭제/보존 정책은 실행 전에 확정한다.
+- 일반 모드 RDS deletion protection, 최종 snapshot 필수·자동 백업 보존 제안. 백업 기간은 필수 입력. EC2 종료 시 root EBS 삭제는 학습용 초안 제안으로, 실제 삭제/보존 정책은 실행 전에 확정한다.
 
 NAT Gateway/ALB/EIP/VPC Endpoint/SSH key pair/SSM 세션/사용자 생성 SQL/DB seed/API 배포는 포함하지 않는다. EC2에 public IPv4가 있어도 인바운드는 0개이며 주소 요금은 견적에 포함했다.
 
@@ -34,7 +34,7 @@ export PATH="$HOME/.local/share/shooterrecords-terraform:$PATH"
 
 `configuration_review_reference`는 확정된 후보 설정 검토 기록을 가리킨다. 빈 값이면 계획을 막지만, 이 문자열을 채운 것 자체는 **apply의 사용자 승인이나 보안 경계가 아니다**. `allowed_account_ids`로 실제 계정도 제한한다. 코드를 변경해 가드를 우회할 수 있으므로 반드시 사람이 비용·diff·대상을 검토한다.
 
-계정/프로파일과 읽기 전용 범위를 먼저 확정하고 아래 항목을 조회한다. 현재 조회하지 않았으며 이 문서는 조회 결과가 아니다.
+계정/프로파일과 읽기 전용 범위를 먼저 확정하고 아래 항목을 조회한다. 아래는 재현 시 사용할 조회 예시이며 실제 계정 조회의 원문·식별자는 공개하지 않는다.
 
 ```bash
 # APPROVED_* 값은 확인된 비공개 로컬 설정. 실제 값은 문서/로그에 출력하지 않는다.
@@ -49,7 +49,7 @@ aws --profile "$APPROVED_PROFILE" --region ap-northeast-2 rds describe-orderable
 
 별도로 정확한 계정(내용은 로그 비공개), AZ·EC2 AMI(x86_64/SSM Agent/루트 최소 크기), RDS SQL Server managed secret/암호화/force_ssl 지원·쿼터·신규 계정 제약을 확인한다. 가격표 SKU/형식 검증은 이를 대신하지 않는다. AMI/엔진 버전을 latest로 자동 결정하지 않는다.
 
-그 뒤 실제 plan을 생성/검토하고 사용자에게 생성 변경 목록·요금·정리 계획을 제시해 **별도 실행 승인**을 받는다. 현재 실제 plan·apply·destroy는 NOT_RUN이다. Terraform state/plan에는 비밀 참조·계정·내부 주소가 들어갈 수 있다. `.terraform`, state/backup, tfvars, plan은 Git에서 제외하며 실제 사용 전 저장·암호화·동시 잠금 방식을 확정한다. 이 초안에서 remote backend를 생성하지 않았다.
+그 뒤 실제 plan을 생성/검토하고 사용자에게 생성 변경 목록·요금·정리 계획을 제시해 **별도 실행 승인**을 받는다. 이 프로젝트에서 실제 실행한 검증 결과는 실환경 보고서에 기록했다. 아래 예시/검증 스크립트 실행만으로 실제 계정 작업의 성공을 주장하지 않는다. Terraform state/plan에는 비밀 참조·계정·내부 주소가 들어갈 수 있다. `.terraform`, state/backup, tfvars, plan은 Git에서 제외하며 실제 사용 전 저장·암호화·동시 잠금 방식을 확정한다. 이 초안에서 remote backend를 생성하지 않았다.
 
 ## 생성 이후의 별도 승인 작업
 

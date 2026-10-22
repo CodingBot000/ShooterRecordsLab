@@ -139,7 +139,7 @@ Player (Id PK, DisplayName, CreatedAtUtc)
 ## 7. 인증·오류·관측
 
 - 공개적으로 읽을 수 있는 **가상 데이터 GET** (추후 변경 가능). 경기 등록은 JWT Bearer의 `matches.write` 권한 필요. 토큰 발급 시스템은 별도의 신뢰된 발급자 또는 개발 환경 테스트 전용.
-- middleware 순서(P1): 라우팅(프레임워크) → 요청 로깅 래퍼 → 예외 처리 → 상태 코드 ProblemDetails → Controller. 로깅 래퍼가 예외 처리 이후의 최종 status를 기록한다. P4에서 인증 → 인가 순서를 추가한다.
+- middleware 순서(P1): 라우팅(프레임워크) → 요청 로깅 래퍼 → 예외 처리 → 상태 코드 ProblemDetails → Controller. 로깅 래퍼가 예외 처리 이후의 최종 status를 기록한다. 현재는 상태 코드 처리 뒤 인증 → 인가를 적용하며 POST는 JWT writer scope를 요구한다.
 - HTTP 오류는 `application/problem+json`(ProblemDetails). 내부 SQL/예외 내용 미노출.
 - `GET /health/live`: 앱 프로세스 liveness. `GET /health/ready`: DB 연결 기반 readiness, 민감 내용 미노출, 짧은 timeout. 공개 시 접근 제어/노출 최소화 검토.
 - 구조화 로깅에 trace/correlation ID, route, status, duration. 토큰, 인증 헤더, DB 연결문자열, 사용자 데이터 원문 로그 금지.
@@ -161,3 +161,7 @@ Player (Id PK, DisplayName, CreatedAtUtc)
 - design-time factory는 연결 문자열 없이 Migration/SQL만 생성한다. 앱은 migrate/seed하지 않는다. 상세 적용·롤백·DB 테스트 안전장치는 `docs/database-validation.md`에 기록한다.
 - API에서 EF 상세 로그를 억제하고 중앙 오류 핸들러에 예외 타입/trace만 기록한다. SQL·연결·예외 원문을 공개하지 않으므로 P4 운영 관측성 점검에서 진단 수준을 재검토해야 한다.
 - EF command timeout 30초와 health timeout 3초는 기술적 초기값이며 용량·성능·SLA의 사용자 승인 기준이 아니다. P4 실측 후 조정한다.
+
+## 실환경 검증 결과
+
+EC2 Linux x86_64 Docker API, private SQL Server 2022 Express RDS, SSM 경로에서 TLS·실DB 12개 테스트·HTTP 18개 사례·동시 등록·장애 복구·대표 SQL 실행 계획을 실제 확인했다. 수치와 코드 버전은 `docs/aws-validation.md` 및 공개 허용 필드의 `report.json`을 따른다. 실제 계정/주소/자원 식별자/비밀/원본 state·계획은 공개 문서에 넣지 않는다.

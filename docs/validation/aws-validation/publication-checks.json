@@ -1,0 +1,10 @@
+{
+  "scope": "Staged repository files, actual sensitive literals and selected credential patterns",
+  "result": "PASS",
+  "reviewedFiles": 187,
+  "actualSensitiveValueMatches": 0,
+  "credentialPatternMatches": 0,
+  "rawCloudArtifactsCommitted": false,
+  "docsInitCommitted": false,
+  "markdownFilesIncluded": 18
+}

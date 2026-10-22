@@ -8,7 +8,7 @@ from pathlib import Path
 
 CHECKS = {
     "local-build", "local-tests", "linux-build", "linux-tests", "container-health",
-    "sql-integration", "sql-tls", "http-liveness", "http-readiness", "http-player",
+    "sql-integration", "sql-tls", "network-isolation", "http-liveness", "http-readiness", "http-player",
     "http-create", "http-replay", "http-conflict", "http-match", "http-stats",
     "http-rankings", "http-pagination", "http-concurrent-idempotency", "http-validation",
     "auth-missing", "auth-scope", "auth-signature", "auth-expired", "auth-issuer",
