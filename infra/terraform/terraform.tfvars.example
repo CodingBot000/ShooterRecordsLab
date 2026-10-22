@@ -1,0 +1,18 @@
+# Deliberately incomplete; this file is NOT an approved deployment configuration.
+# Fill only after decisions. Keep the resulting *.tfvars out of Git.
+aws_profile                 = ""
+allowed_account_id          = ""
+configuration_review_reference = ""
+name_prefix                 = ""
+vpc_cidr                    = ""
+availability_zones          = ["", ""]
+ec2_ami_id                  = ""
+ec2_instance_type           = ""
+ec2_root_volume_gib         = null
+rds_instance_class          = ""
+rds_engine_version          = ""
+rds_storage_gib             = null
+backup_retention_days       = null
+final_snapshot_identifier   = ""
+monthly_budget_usd          = null
+budget_alert_email          = ""

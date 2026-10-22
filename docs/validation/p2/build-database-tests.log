@@ -1,0 +1,17 @@
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  ShooterRecordsLab.Domain -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+  ShooterRecordsLab.Application -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/bin/Debug/net10.0/ShooterRecordsLab.Application.dll
+  ShooterRecordsLab.Infrastructure -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/bin/Debug/net10.0/ShooterRecordsLab.Infrastructure.dll
+  ShooterRecordsLab.UnitTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll
+  ShooterRecordsLab.Api -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/bin/Debug/net10.0/ShooterRecordsLab.Api.dll
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/SqlServerTests.cs(37,13): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj]
+  ShooterRecordsLab.IntegrationTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll
+
+빌드하지 못했습니다.
+
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/SqlServerTests.cs(37,13): error xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj]
+    경고 0개
+    오류 1개
+
+경과 시간: 00:00:02.18

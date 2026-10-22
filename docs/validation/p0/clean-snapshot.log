@@ -1,0 +1,34 @@
+Clean source snapshot: no bin/obj/.git, copied git non-ignored source files (not an actual clone: no initial commit).
+Command: dotnet --version
+10.0.402
+Command: dotnet restore --locked-mode
+  복원할 프로젝트를 확인하는 중...
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Domain/ShooterRecordsLab.Domain.csproj을(를) 39밀리초 동안 복원했습니다.
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj을(를) 43밀리초 동안 복원했습니다.
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj을(를) 43밀리초 동안 복원했습니다.
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj을(를) 73밀리초 동안 복원했습니다.
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.UnitTests/ShooterRecordsLab.UnitTests.csproj을(를) 76밀리초 동안 복원했습니다.
+  /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj을(를) 84밀리초 동안 복원했습니다.
+Command: dotnet build -warnaserror --no-restore
+  ShooterRecordsLab.Domain -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+  ShooterRecordsLab.Application -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Application/bin/Debug/net10.0/ShooterRecordsLab.Application.dll
+  ShooterRecordsLab.Infrastructure -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Infrastructure/bin/Debug/net10.0/ShooterRecordsLab.Infrastructure.dll
+  ShooterRecordsLab.UnitTests -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll
+  ShooterRecordsLab.Api -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/src/ShooterRecordsLab.Api/bin/Debug/net10.0/ShooterRecordsLab.Api.dll
+  ShooterRecordsLab.IntegrationTests -> /private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:02.21
+Command: dotnet test --no-build --filter Category\!=Database
+/private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+/private/var/folders/0t/c8ctlf3s71g_tb7h3t3nfksr0000gn/T/shooterrecords-p0-clean-521fflxx/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+
+통과!  - 실패:     0, 통과:     4, 건너뜀:     0, 전체:     4, 기간: 12 ms - ShooterRecordsLab.UnitTests.dll (net10.0)
+
+통과!  - 실패:     0, 통과:     6, 건너뜀:     0, 전체:     6, 기간: 372 ms - ShooterRecordsLab.IntegrationTests.dll (net10.0)
+Command: dotnet format --verify-no-changes --no-restore

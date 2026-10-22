@@ -1,0 +1,6 @@
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+다음 테스트를 사용할 수 있습니다.
+다음 테스트를 사용할 수 있습니다.
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll에 지정된 테스트 사례 필터 `Category=Database`과(와) 일치하는 테스트가 없습니다.
+    ShooterRecordsLab.IntegrationTests.SqlServerTests.SqlServer_concurrency_atomicity_constraints_and_rankings

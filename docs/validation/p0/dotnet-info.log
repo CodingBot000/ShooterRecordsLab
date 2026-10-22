@@ -1,0 +1,45 @@
+.NET SDK:
+ Version:           10.0.402
+ Commit:            a8dd0577c5
+ Workload version:  10.0.400-manifests.da132f47
+ MSBuild version:   18.9.15+a8dd0577c
+
+런타임 환경:
+ OS Name:     Mac OS X
+ OS Version:  26.5
+ OS Platform: Darwin
+ RID:         osx-arm64
+ Base Path:   /Users/switch/.local/share/shooterrecords-dotnet/sdk/10.0.402/
+
+설치된 .NET 워크로드:
+표시할 설치된 워크로드가 없습니다.
+새 매니페스트를 설치할 때 use workload sets 사용하도록 구성됩니다.
+워크로드 집합이 설치되어 있지 않습니다. "dotnet workload restore"를 실행하여 워크로드 집합을 설치하세요.
+
+Host:
+  Version:      10.0.13
+  Architecture: arm64
+  Commit:       4099f83977
+
+.NET SDKs installed:
+  10.0.402 [/Users/switch/.local/share/shooterrecords-dotnet/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 10.0.13 [/Users/switch/.local/share/shooterrecords-dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 10.0.13 [/Users/switch/.local/share/shooterrecords-dotnet/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT              [1]
+  DOTNET_NOLOGO                            [1]
+
+global.json file:
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/global.json
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download

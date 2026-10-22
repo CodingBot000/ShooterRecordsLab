@@ -1,0 +1,14 @@
+{
+  "testing-guidelines.md": "2e21804fe064419d13bd945cbafd751b57664810095b1495e0694afcc2a30af3",
+  "architecture.md": "0420725cb18ca52247257618eb4c48f29ca387e9c2233e1c7fa1469797b32e09",
+  "review-guidelines.md": "7b11c73920d2b4e5c3436c676969b3e4f21c2a17b00e0a97fd90475da61654d7",
+  "project-status-template.md": "e3ac2dcaf41d58f61f1bcdb7b46a57622c827c90fc4cda53c8b5e721bb4e1dcc",
+  "START_HERE.md": "3ed25f95928efe9dad9835d763445424fe7bc93da37d79a7edd44386cd75062e",
+  "development-plan.md": "8bd1e710ea0aefb5295e858c119cd4adc7d250c86a1e9730d6baa0d073a250f0",
+  "aws-deployment.md": "d44af05611c50ae1ce1719003d34330e9e055ffe0987365d31443d6939382a9e",
+  "api-contract.md": "769b097192e54f389b7c1c6bda3ba58014b8a8e6d982acb7bfadd56956da4da1",
+  "security-checklist.md": "d1c50d030931730139a4b1d957d261b2e4b7b1e77913124f064b87e2aea4244c",
+  "AGENTS.md": "7d49827dde15b7b1eb604d74f6b51bdab60600684ca03149bc3da88ee0d5627b",
+  "dotnet-guidelines.md": "3290b82ccbaf9c0d614dbb55f9987fdd2d6f6a182eb84950f8a8fd680faff226",
+  "decisions.md": "8a834c5d2fd2fbc34df605137e1041182b6494a15204b5cc6875cf1473f74d29"
+}

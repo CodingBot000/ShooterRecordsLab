@@ -1,0 +1,17 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj을(를) 47밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/ShooterRecordsLab.Domain.csproj을(를) 44밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj을(를) 47밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj을(를) 85밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/ShooterRecordsLab.UnitTests.csproj을(를) 91밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj을(를) 94밀리초 동안 복원했습니다.
+  ShooterRecordsLab.Domain -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/Matches/MatchService.cs(60,25): error CS0104: 'Match'은(는) 'ShooterRecordsLab.Domain.Entities.Match' 및 'System.Text.RegularExpressions.Match' 사이에 모호한 참조입니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj]
+
+빌드하지 못했습니다.
+
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/Matches/MatchService.cs(60,25): error CS0104: 'Match'은(는) 'ShooterRecordsLab.Domain.Entities.Match' 및 'System.Text.RegularExpressions.Match' 사이에 모호한 참조입니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj]
+    경고 0개
+    오류 1개
+
+경과 시간: 00:00:02.01

@@ -1,0 +1,11 @@
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+결과 파일: /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/docs/validation/p0/test-results/non-database.trx
+
+통과!  - 실패:     0, 통과:     4, 건너뜀:     0, 전체:     4, 기간: 11 ms - ShooterRecordsLab.UnitTests.dll (net10.0)
+경고: 결과 파일을 덮어쓰는 중: /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/docs/validation/p0/test-results/non-database.trx
+결과 파일: /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/docs/validation/p0/test-results/non-database.trx
+
+통과!  - 실패:     0, 통과:     6, 건너뜀:     0, 전체:     6, 기간: 354 ms - ShooterRecordsLab.IntegrationTests.dll (net10.0)

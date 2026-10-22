@@ -1,0 +1,10 @@
+
+다음 소스가 사용되었습니다.
+   https://api.nuget.org/v3/index.json
+
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.Api`에 취약한 패키지가 없습니다.
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.Application`에 취약한 패키지가 없습니다.
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.Domain`에 취약한 패키지가 없습니다.
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.Infrastructure`에 취약한 패키지가 없습니다.
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.IntegrationTests`에 취약한 패키지가 없습니다.
+현재 소스를 고려해 볼 때 지정된 프로젝트 `ShooterRecordsLab.UnitTests`에 취약한 패키지가 없습니다.

@@ -1,0 +1,28 @@
+Command: dotnet --version
+10.0.402
+Command: dotnet restore --locked-mode
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+Command: dotnet build -warnaserror --no-restore
+  ShooterRecordsLab.Domain -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+  ShooterRecordsLab.Application -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/bin/Debug/net10.0/ShooterRecordsLab.Application.dll
+  ShooterRecordsLab.Infrastructure -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/bin/Debug/net10.0/ShooterRecordsLab.Infrastructure.dll
+  ShooterRecordsLab.UnitTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll
+  ShooterRecordsLab.Api -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/bin/Debug/net10.0/ShooterRecordsLab.Api.dll
+  ShooterRecordsLab.IntegrationTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:01.17
+Command: dotnet test --no-build --filter Category\!=Database
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+
+
+통과!  - 실패:     0, 통과:    10, 건너뜀:     0, 전체:    10, 기간: 19 ms - ShooterRecordsLab.UnitTests.dll (net10.0)
+
+통과!  - 실패:     0, 통과:    71, 건너뜀:     0, 전체:    71, 기간: 2 s - ShooterRecordsLab.IntegrationTests.dll (net10.0)
+Command: dotnet format --verify-no-changes --no-restore

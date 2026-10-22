@@ -1,0 +1,7 @@
+PASS: docs/init Markdown 12개 SHA-256 원본 일치
+PASS: gitignore .env
+PASS: gitignore appsettings.Development.local.json
+PASS: gitignore infra/terraform/terraform.tfstate
+PASS: gitignore infra/terraform/example.tfvars
+PASS: gitignore dummy.key
+PASS: selected credential-pattern scan found no matches (not a full secret audit)

@@ -1,0 +1,20 @@
+info : X.509 인증서 체인 유효성 검사는 '/Users/switch/.local/share/shooterrecords-dotnet/sdk/10.0.402/trustedroots/codesignctl.pem'에서 대체 인증서 번들을 사용합니다.
+info : X.509 인증서 체인 유효성 검사는 '/Users/switch/.local/share/shooterrecords-dotnet/sdk/10.0.402/trustedroots/timestampctl.pem'에서 대체 인증서 번들을 사용합니다.
+info : '/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj' 프로젝트에 'System.Security.Cryptography.Pkcs' 패키지에 대한 PackageReference를 추가하는 중입니다.
+info : /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj의 패키지를 복원하는 중...
+info :   CACHE https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/index.json
+info :   GET https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/10.0.13/system.security.cryptography.pkcs.10.0.13.nupkg
+info :   OK https://api.nuget.org/v3-flatcontainer/system.security.cryptography.pkcs/10.0.13/system.security.cryptography.pkcs.10.0.13.nupkg 193밀리초
+info :   CACHE https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/index.json
+info :   GET https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/9.0.0/microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg
+info :   OK https://api.nuget.org/v3-flatcontainer/microsoft.extensions.dependencyinjection.abstractions/9.0.0/microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg 31밀리초
+info : 콘텐츠 해시 Microsoft.Extensions.DependencyInjection.Abstractions을(를) 사용하여 9.0.0에서 https://api.nuget.org/v3/index.json /Users/switch/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/9.0.0에 +6f2qv2a3dLwd5w6JanPIPs47CxRbnk+ZocMJUhv9NxP88VlOcJYZs9jY+MYSjxvady08bUZn6qgiNh7DadGgg==을(를) 설치했습니다.
+info : 콘텐츠 해시 System.Security.Cryptography.Pkcs을(를) 사용하여 10.0.13에서 https://api.nuget.org/v3/index.json /Users/switch/.nuget/packages/system.security.cryptography.pkcs/10.0.13에 a+EovgC1fBnwdlQ6cn3j4JFBfKqiFaFvoAhjisOoSvazLAcIznaBzPQP0oYnvccmeXfqUH1KebVZOxSeH6rMaw==을(를) 설치했습니다.
+info :   CACHE https://api.nuget.org/v3/vulnerabilities/index.json
+info :   CACHE https://api.nuget.org/v3-vulnerabilities/2026.10.19.23.33.13/vulnerability.base.json
+info :   CACHE https://api.nuget.org/v3-vulnerabilities/2026.10.19.23.33.13/2026.10.22.11.33.27/vulnerability.update.json
+info : 'System.Security.Cryptography.Pkcs' 패키지는 '/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj' 프로젝트에 지정된 모든 프레임워크와 호환됩니다.
+info : 'System.Security.Cryptography.Pkcs' 패키지 '10.0.13' 버전에 대한 PackageReference가 '/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj' 파일에 추가되었습니다.
+info : 자산 파일을 디스크에 쓰는 중입니다. 경로: /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/obj/project.assets.json
+info : 디스크에 패키지 잠금 파일을 쓰는 중입니다. 경로: /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/packages.lock.json
+log  : /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj을(를) 404밀리초 동안 복원했습니다.

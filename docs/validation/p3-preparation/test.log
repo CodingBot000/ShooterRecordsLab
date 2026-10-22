@@ -1,0 +1,10 @@
+tests/draft.tftest.hcl... in progress
+  run "draft_is_private_and_has_no_inbound_to_relay"... pass
+  run "missing_configuration_review_fails"... pass
+  run "same_database_az_fails"... pass
+  run "wrong_engine_family_fails"... pass
+  run "unset_budget_fails"... pass
+tests/draft.tftest.hcl... tearing down
+tests/draft.tftest.hcl... pass
+
+Success! 5 passed, 0 failed.

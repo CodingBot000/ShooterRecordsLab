@@ -1,0 +1,10 @@
+PASS: original docs/init Markdown hashes 12/12 unchanged
+PASS: ignored infra/terraform/.terraform/providers/example
+PASS: ignored infra/terraform/terraform.tfstate
+PASS: ignored infra/terraform/local.tfvars
+PASS: ignored infra/terraform/review.tfplan
+PASS: ignored infra/terraform/review.tfplan.json
+PASS: provider lock and incomplete input example are versionable
+PASS: no root Terraform state/plan file from a real account plan/apply
+PASS: all 5 Terraform test runs are mocked plan-only
+PASS: saved cost scenarios reproduce exactly

@@ -1,0 +1,39 @@
+# Build / test artifacts
+**/bin/
+**/obj/
+TestResults/
+artifacts/
+.vs/
+.idea/
+*.user
+*.suo
+.DS_Store
+
+# Local SDK / secrets
+.tools/
+.env*
+!.env.example
+appsettings.*.local.json
+**/secrets.json
+*.pfx
+*.pem
+*.key
+.aws/
+
+# Terraform state and credentials
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+*.tfplan
+crash.log
+
+# Machine-specific test result files
+*.trx
+
+# Terraform plan exports may contain sensitive values
+*.tfplan.json
+
+# Local initialization originals; operational docs are committed
+/docs/init/

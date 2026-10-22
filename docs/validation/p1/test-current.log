@@ -1,0 +1,8 @@
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll(.NETCoreApp,Version=v10.0)에 대한 테스트 실행
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+지정된 패턴과 일치한 총 테스트 파일 수는 1개입니다.
+
+통과!  - 실패:     0, 통과:    10, 건너뜀:     0, 전체:    10, 기간: 18 ms - ShooterRecordsLab.UnitTests.dll (net10.0)
+
+통과!  - 실패:     0, 통과:    43, 건너뜀:     0, 전체:    43, 기간: 2 s - ShooterRecordsLab.IntegrationTests.dll (net10.0)

@@ -1,0 +1,19 @@
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  ShooterRecordsLab.Domain -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+  ShooterRecordsLab.Application -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/bin/Debug/net10.0/ShooterRecordsLab.Application.dll
+  ShooterRecordsLab.UnitTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/Persistence/Migrations/20261022150630_InitialCreate.cs(6,11): error IDE0161: 파일 범위 namespace 스로 변환 (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0161) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/Persistence/Migrations/20261022150634_AddRankingsProcedure.cs(5,11): error IDE0161: 파일 범위 namespace 스로 변환 (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0161) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj]
+  ShooterRecordsLab.Infrastructure -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/bin/Debug/net10.0/ShooterRecordsLab.Infrastructure.dll
+  ShooterRecordsLab.Api -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/bin/Debug/net10.0/ShooterRecordsLab.Api.dll
+  ShooterRecordsLab.IntegrationTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll
+
+빌드하지 못했습니다.
+
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/Persistence/Migrations/20261022150630_InitialCreate.cs(6,11): error IDE0161: 파일 범위 namespace 스로 변환 (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0161) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/Persistence/Migrations/20261022150634_AddRankingsProcedure.cs(5,11): error IDE0161: 파일 범위 namespace 스로 변환 (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0161) [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj]
+    경고 0개
+    오류 2개
+
+경과 시간: 00:00:02.57

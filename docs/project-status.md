@@ -1,0 +1,138 @@
+# 프로젝트 진행 현황 — ShooterRecordsLab
+
+## 현재 상태
+
+- 현재 단계: P0/P1/P2 로컬 게이트 완료. P3 서울 견적·IaC 준비 완료, 실제 생성·실DB 검증 전.
+- 마지막 확인: 2026-10-23 00:29 KST
+- 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 GitHub 공개 작업 진행 중.
+- 환경: macOS 26.5 / Arm64 / SDK 10.0.402 / ASP.NET Core 10.0.13
+- AWS: 공식 공개 요금/문서만 조회. 계정 API 조회·생성·변경·배포 없음. 기존 계정 자원 상태 미확인.
+- AWS 승인/예산: 서울 견적·IaC 준비만 승인. 월 예산/프로파일·사양·실행 미정·미승인.
+
+## 진행표
+
+| 단계 | 상태 | 근거 | 남은 일 |
+|---|---|---|---|
+| P0 문서/솔루션 | 완료 | 깨끗한 소스 스냅샷 restore/build/test/format 성공 | 실제 clone은 최초 커밋 이후 재검증 가능 |
+| P1 HTTP/도메인 | 완료 | 단위 10 + HTTP 49, build/format 성공 | SQL 구현은 P2 |
+| P2 EF/MSSQL | 완료(코드·비DB 게이트) | 단위 10 + 비DB 통합 71, SQL 생성·모델 drift 없음 | SQL 실행/동시성은 P3에서 실증 |
+| P3 AWS RDS | 준비 완료 / 실행·DB 게이트 미완료 | 공식 서울 단가·IaC·mock plan 5건 | 예산/계정/사양/보존 확정·실제 plan 검토·실행 승인·실DB 검증 |
+| P4 보안/운영 | 미시작 | - | JWT·동시성·성능 |
+| P5 배포 | 미시작 | - | 별도 승인·실배포 검증 |
+| P6 최종 검증 | 미시작 | - | 전체 실행 증거 |
+
+## P0 변경 및 검증 — 2026-10-22 23:56 KST
+
+- `START_HERE.md` 매핑 11개를 새 대상에 복사. 기존 대상 없음. 루트 AGENTS와 운영 지침을 명시적으로 읽음. 원본 SHA-256: [init-sha256.json](validation/p0/init-sha256.json).
+- Git 초기화, `.slnx`, 4개 소스/2개 xUnit 프로젝트, 지정된 참조 방향, `.editorconfig`, analyzer/nullable, `.gitignore`, NuGet 소스·정확 버전·lock, SDK 고정.
+- Controllers/OpenAPI/ProblemDetails/JSON 로그 설정. 기본 liveness와 DB 미구성 readiness 분리. 샘플 WeatherForecast 제거.
+- README 개발 사전 조건·실행·검증 안내 및 `infra/scripts/verify.sh` 추가.
+- 변경 이유·패키지 이유/라이선스/대안: ADR-005.
+
+| 직접 실행한 명령 | 결과 | 증거 |
+|---|---|---|
+| `dotnet --info` | PASS: SDK 10.0.402, runtime 10.0.13, osx-arm64 | [환경](validation/p0/dotnet-info.log) |
+| `dotnet restore` | PASS: 6개 복원 | [복원](validation/p0/restore.log) |
+| `dotnet build -warnaserror --no-restore` 최초 | FAIL: MSB4166, 자식 노드 종료 | [최초 실패](validation/p0/build-initial.log) |
+| `dotnet build -warnaserror --no-restore -m:1 -nr:false` | PASS: 경고/오류 0 | [진단](validation/p0/build-serial.log) |
+| `./infra/scripts/verify.sh docs/validation/p0` | PASS: restore/build/test/format | [빌드](validation/p0/build.log), [테스트](validation/p0/test.log), [format](validation/p0/format.log) |
+| 깨끗한 소스 복사본에서 `bash infra/scripts/verify.sh artifacts/clean` | PASS: locked restore, 경고/오류 0, 단위 4 + HTTP 6 통과, 실패/skip 0, format 성공 | [전체 로그](validation/p0/clean-snapshot.log) |
+
+- 실행 환경 조치: `MSBUILDDISABLENODEREUSE=1` 후 기본 병렬 빌드 성공. 최초 실패의 원인은 도구 호출 종료 후 남은 노드 재사용으로 추정하며 확정하지 않음.
+- TRX 고정 파일명이 두 프로젝트에서 겹치는 경고를 발견해 스크립트에서 제거. 최종 검증은 콘솔 로그에 프로젝트별 개수를 기록한다.
+- HTTP 검증: Development/Production liveness 200, DB 미구성 readiness 503 및 안전한 본문, Development OpenAPI 200/Production 404, 없는 경로 ProblemDetails/traceId.
+- 구조 검증: 4계층 참조 방향, Domain/Application의 웹·EF 패키지 의존 없음.
+- clean 검증은 bin/obj/.git가 없는 소스 복사본이며 실제 fresh clone이라고 주장하지 않는다. 최초 커밋이 없어 SHA/clone 검증은 미실행.
+- 별도 자기 리뷰: PASS_WITH_RISKS. 계약/참조/환경 노출/비밀/README와 로그를 재검토했다. 구현자와 같은 세션의 별도 리뷰 패스로 독립 검증 한계가 있다. Critical/High 발견 없음. DB/인증/배포는 단계 범위 밖이며 미검증.
+- 다음: P1 도메인·HTTP 계약 및 개발 전용 Fake, 실패·경계 테스트.
+
+## 사용자 결정 필요
+
+- 서울 견적·IaC 준비는 선택됨. [A/B/C 비교](aws-cost-estimate.md)의 사양 선택은 사용자가 예산 결정 후로 보류했다. 월 예산(USD)·AWS 프로파일은 답변 대기. 실제 계정·사양·보존/정리·수신자·IAM/실행은 미정이다.
+- 신뢰할 JWT issuer/audience 및 권한 mapping: P4에서 확정. 임의의 운영 인증서버를 만들지 않음.
+
+## 미검증·남은 위험
+
+- 실제 SQL Server의 SQL/FK/UNIQUE/트랜잭션/Stored Procedure/실행 계획: NOT_RUN(승인·DB 없음).
+- JWT 서명/인증/인가, EC2/SSM, Docker 배포: NOT_RUN.
+- 프론트엔드 구현 없음. AWS 과금·IAM 변경·DB 데이터 작업 없음.
+
+## P1 변경 및 검증 — 2026-10-23 00:02 KST
+
+- Player/Match/MatchResult/Outcome, 통계 비율, PlayerService/MatchService, 저장소 추상화, 웹 DTO/Controllers, UTC converter, 안전한 오류 처리·요청 JSON 로그.
+- F01/F02/F03/F04/F10 및 메모리 모사 멱등성 201/200/409 구현. Production에 Fake/미인증 쓰기 노출 없음. 명시적 `--seed-demo`만 메모리 가상 Player를 생성한다.
+- 직접 실행: `dotnet build -warnaserror` 최초 FAIL(CS0104: 정규식 Match/도메인 Match 이름 충돌), 명시적 타입 alias 후 PASS. [최초 빌드](validation/p1/build-initial.log), [수정 후](validation/p1/build-fixed.log).
+- 주의: 최초 빌드 실패 후 실행된 `dotnet test --no-build`는 P0 바이너리 10건을 실행했으므로 P1 증거에서 제외한다([이전 바이너리 로그](validation/p1/test-initial.log)). 빌드 성공과 연결한 재검증부터 P1 결과로 집계한다.
+- `dotnet format --no-restore` 후 `./infra/scripts/verify.sh docs/validation/p1`: PASS. locked restore, build 경고/오류 0, 단위 10 + HTTP 49 = 59 통과, 실패/skip 0, format 확인 성공. [빌드](validation/p1/build.log), [테스트](validation/p1/test.log), [format](validation/p1/format.log).
+- 검증: 정상/미존재/잘못된 UUID, 빈 컬렉션, 통계와 반올림, UTC 명시·미래 5분 경계, null/누락/잘못된 JSON, 수치·외부 ID 길이·참가자 1/2/20/21명, 참가자 미존재·중복·결과 모순, 재시도 순서 무관/충돌, Location 조회, 안정 정렬·큰 page, 취소 전달, 안전한 500, Production 쓰기 비노출.
+- Kestrel 실제 프로세스 실행: `dotnet run --no-build --project src/ShooterRecordsLab.Api --launch-profile http -- --seed-demo`; loopback live/ready/OpenAPI/seed Player 응답을 확인. [실행 로그](validation/p1/kestrel.log), [스모크 결과](validation/p1/kestrel-smoke.log).
+- 별도 자기 리뷰 PASS_WITH_RISKS: 로그 status가 예외 처리보다 먼저 기록되는 문제를 발견해 래퍼 순서를 수정했다. 정규식 ASCII·문화권, UUID/시간 canonicalization, 취소·원자적 모사, 개발 외 경로 노출을 재검토. 같은 세션으로 독립성 한계 있음.
+- 남은 위험: Fake는 DB 제약/트랜잭션·동시성·LINQ 번역 증거가 아니다. JWT·SQL·배포 미검증. 실제 DB 통합 테스트 NOT_RUN.
+- 다음: P2 EF Core SQL Server 매핑·트랜잭션·조회·랭킹 Stored Procedure·Migration SQL 작성. AWS/DB 작업 없음.
+
+## P2 변경 및 검증 — 2026-10-23 00:18 KST
+
+- EF Core SqlServer/Design/dotnet-ef 10.0.13과 lock, Scoped DbContext·Fluent mapping·고유 키/FK/CHECK·UTC/길이·covering index.
+- SQL Repository의 projection/no-tracking/async 조회·bigint 통계, long offset 페이지, 명시적 등록 트랜잭션·SQL unique 경쟁 후 재조회·fingerprint 비교. Fake는 tests로 이동. JWT 전 Development만 쓰기 허용.
+- InitialCreate/AddRankingsProcedure, immutable V001 T-SQL embedded 리소스, 검토용 idempotent `infra/scripts/migrations.sql`, 승인 후 수동 적용할 가상 seed SQL. 앱 startup migrate/seed 없음.
+- 실제 DB readiness(3초 timeout)/TLS 설정 검사, SQL 예외·연결 원문 로그 억제. 비DB WebHost는 ambient 연결 설정과 DbContext options를 명시적으로 제거한다.
+- 검증/롤백·안전장치: [database-validation.md](database-validation.md). API 계약/README/아키텍처/ADR-007 갱신.
+
+| 실제 실행한 명령 | 결과 | 로그 |
+|---|---|---|
+| `dotnet build -warnaserror` 최초 | FAIL: Pkcs 9.0.11의 NU1902/NU1903, 경고 억제 없이 10.0.13 override로 수정 | [초기 실패](validation/p2/build-initial.log), [수정](validation/p2/dependency-fix.log), [수정 후 빌드](validation/p2/build-fixed.log) |
+| Migration 생성 후 build | FAIL: IDE0161 생성 코드 namespace, xUnit2031 Assert.Single 사용 | [모델 빌드](validation/p2/build-model.log), [DB 테스트 빌드](validation/p2/build-database-tests.log) |
+| `dotnet format --no-restore` 후 verify script | PASS: 모든 analyzer 수정, 경고 억제 없음 | [format 적용](validation/p2/format-apply.log) |
+| `./infra/scripts/verify.sh docs/validation/p2` | PASS: locked restore/build 경고·오류 0/test 81 통과/format 확인 | [복원](validation/p2/restore.log), [빌드](validation/p2/build.log), [테스트](validation/p2/test.log), [format](validation/p2/format.log) |
+| 깨끗한 소스 복사본 `bash infra/scripts/verify.sh artifacts/clean` | PASS: 단위 10 + 비DB 통합 71 = 81, 실패/skip 0, restore/build/format 성공 | [전체 로그](validation/p2/clean-snapshot.log) |
+| `dotnet ef migrations add InitialCreate ...` / `add AddRankingsProcedure ...` | PASS: DB 없이 소스 생성 | [초기 생성](validation/p2/migration-initial.log), [SP 생성](validation/p2/migration-rankings.log) |
+| `dotnet ef migrations script --idempotent --project src/ShooterRecordsLab.Infrastructure --startup-project src/ShooterRecordsLab.Api --output infra/scripts/migrations.sql` | PASS: 검토용 SQL 생성, 적용하지 않음 | [생성 로그](validation/p2/script.log) |
+| `dotnet ef migrations has-pending-model-changes --project src/ShooterRecordsLab.Infrastructure --startup-project src/ShooterRecordsLab.Api` | PASS: 마지막 Migration 이후 모델 변경 없음 | [모델 일치](validation/p2/model-drift.log) |
+| `dotnet list package --vulnerable --include-transitive --no-restore` | PASS: 조회 시점 NuGet 소스 기준 6개 프로젝트의 알려진 취약 패키지 없음 | [의존성 조회](validation/p2/dependency-audit.log) |
+| `dotnet test --no-build --list-tests --filter 'Category=Database'` | PASS(discovery만): SQL 시나리오 1개 선택, Unit 0개 | [필터 확인](validation/p2/database-discovery.log) |
+| `dotnet test --filter 'Category=Database'` | **NOT_RUN**: AWS 승인·Test DB 없음. exclude와 skip을 성공으로 집계하지 않음 | 실제 SQL 검증은 P3 |
+| `dotnet run --no-build --project src/ShooterRecordsLab.Api --launch-profile http` (깨끗한 소스 빌드에서) | PASS: live 200/ready 503/OpenAPI 200/DB 미구성 조회는 안전한 500 | [Kestrel](validation/p2/kestrel.log), [스모크](validation/p2/kestrel-smoke.log) |
+| 원본 SHA-256·gitignore·제한적 credential 패턴 검사 | PASS: 원본 Markdown 12개 불변, 비밀/상태파일 ignore | [소스 확인](validation/p2/source-checks.log) |
+
+- 코드·생성 SQL 별도 자기 리뷰: [P0~P2 리뷰](reviews/p2-review.md), PASS_WITH_RISKS. 실제 SQL·JWT·AWS 검증 전이라는 한계 포함. 같은 세션으로 독립성 한계 있음.
+- 추가 회귀: ASCII 변환 전 검증(ſ), 정확한 outcome 이름, 500 로그 status/비밀 미노출, TLS/전용 Test DB allowlist 가드, SP 매개변수화·모델 제약 정적 확인.
+- 실제 SQL Server의 FK/UNIQUE/CHECK/rollback/동시성/SP·실행 계획은 **미검증**. 작성된 Database 테스트는 실제 연결·변경을 수행할 수 있으므로 승인 후 별도로 실행해야 한다.
+- 다음: P3 비용·리전/계정·예산·RDS/EC2/네트워크·보존/정리 결정을 구체화하고 IaC/견적을 검토한 뒤 사용자 실행 승인. 현재 값은 미정이며 임의 정책/예산을 적용하지 않음.
+- 비용/권한 변경: AWS 조회·리소스 생성/변경/삭제·IAM 변경·DB 연결/DDL/seed·실배포 모두 수행하지 않음. 프론트엔드 없음.
+
+## P3 준비 변경 및 검증 — 2026-10-23 00:29 KST
+
+- 사용자 선택 기록: 서울(ap-northeast-2) 기준 견적·IaC 초안, 자원 생성 없음. ADR-008에 승인 범위와 미정 항목을 분리했다.
+- 공식 공개 RDS/EC2 offer 및 AWS 요금·운영 문서를 확인했다. 계정 자격정보를 사용하거나 계정 API를 조회하지 않았다.
+- [견적](aws-cost-estimate.md): 730시간 기본 micro $39.52 / small $62.15, 60시간 small 비교 예시 $8.55. 추가 CPU·백업/API·KMS·전송·세금·기존 계정 비용은 별도. 모두 미승인 비교값이며 과금 상한이 아니다.
+- [단가 근거](validation/p3-preparation/pricing-extract.json): SKU·원본 URL·게시 시각·SHA-256. [Decimal 산출 결과](validation/p3-preparation/cost-scenarios.json), `infra/scripts/estimate-aws-cost.py`로 재현.
+- `infra/terraform`: versions/variables/network/compute/database/budget/outputs, provider lock, 빈 입력 example, mock tests 및 README. 전용 VPC·SSM EC2·private RDS·SG·암호화/TLS·보호·Budget 제안. 실제 생성 없음.
+- 도구: Terraform 1.17.0 공식 archive SHA-256 확인, 사용자 경로 설치. AWS provider 6.70.0 서명/정확 버전·lock. 기존 AWS CLI는 있지만 프로파일 미선택이며 Session Manager plugin은 PATH에서 찾지 못함(설치하지 않음).
+
+| 실제 실행한 명령 | 결과 | 증거 |
+|---|---|---|
+| `terraform -chdir=infra/terraform init -backend=false -input=false` | PASS: provider 다운로드/로컬 초기화만, AWS 계정 API 없음 | [init](validation/p3-preparation/init.log) |
+| `terraform -chdir=infra/terraform test -no-color` 최초 | FAIL: plan 시 computed ingress/route unknown; 1 실패/4 후속 skip | [최초 실패](validation/p3-preparation/test-initial.log) |
+| 모의 생성값 `override_during=plan` 지정 후 같은 테스트 | PASS: 5 통과/실패·skip 0. 실제 apply로 바꾸지 않음 | [최종 테스트](validation/p3-preparation/test.log) |
+| `./infra/scripts/verify-infra.sh docs/validation/p3-preparation` | PASS: init/fmt-check/validate/mock plan 5건/비용 재계산 | [전체](validation/p3-preparation/verification.log), [fmt](validation/p3-preparation/fmt.log), [validate](validation/p3-preparation/validate.log), [비용](validation/p3-preparation/cost.log) |
+| 앱 회귀 `./infra/scripts/verify.sh docs/validation/p3-preparation/app-regression` | PASS: restore/build 경고·오류 0, 단위 10+비DB 통합 71=81 통과, skip/실패 0, format 성공 | [회귀 로그](validation/p3-preparation/app-regression.log) |
+| 실제 AWS provider `terraform plan` / apply / destroy, 계정 API·SSM·실DB | **NOT_RUN**: 계정·예산·정책/실행 미확정 | 모의 plan을 실인프라 검증으로 간주하지 않음 |
+
+- 별도 자기 리뷰: PASS_WITH_RISKS(동일 세션으로 독립성 한계). SG 인바운드는 DB에 relay SG→1433 1개, EC2 인바운드 0·private DB 경로·master 권한 분리·무시 규칙·보호/고정 비용 입력을 검토했다. AWS 공식 static 파라미터 문서에 맞춰 force_ssl을 pending-reboot로 수정하고 회귀 assertion 추가.
+- configuration_review_reference는 실제 후보 입력 검토 기록이며 apply 승인/강제 보안 통제가 아니다. empty일 때 VPC와 종속 자원 계획을 막는다. 코드/fixture 숫자는 승인 정책이 아니다.
+- 남은 위험: 실제 engine/class/gp3/암호화/AZ 주문 가능성, AMI/쿼터·SSM/TLS·IAM·비용 사용량은 미검증. RDS T3 초과 CPU와 중지 후 잔존/7일 자동 재시작 비용 주의. state 저장·보존/정리·보안 패치 운영 방안도 확정 필요.
+- 다음: 사용자 사양/월 예산/프로파일 답변 → 허용된 읽기 전용 조사·입력 확정 → 실제 plan/견적·삭제 정책 검토 → 별도 생성 승인. 실DB 테스트·P3 완료 표시는 그 이후.
+
+- 최종 소스 확인: `source-checks.log`에서 원본 12개 해시 보존, state/tfvars/plan 무시, lock/example 보존, mock plan-only 5건과 비용 재현을 확인했다. 실제 자원/DB 생성·변경 없음.
+
+## 2026-10-23 — 예산 결정 전 사양 보류
+
+- 사용자: “예산을 먼저 정하고 사양 선택 보류”. 실제 사양·예산·프로파일·생성 승인은 확정하지 않았다.
+- 월 약 30회 요청일 때의 비용 질문에 대해 상시 실행과 필요한 시간만 실행하는 가정을 분리했다. 월 요청 수는 가동 시간과 다르며 자동 중지/스케줄 승인이 아니다.
+- 문서의 선택 상태만 갱신. Terraform/API 설정·AWS/DB·배포 변경 없음.
+
+## 2026-10-23 — GitHub 최초 공개 준비
+
+- 사용자 승인: `ShooterRecordsLab` 신규 저장소의 Public 공개·커밋·푸시. `/docs/init/`만 초기 문서 공개 대상에서 제외하고, 그 밖의 에이전트 Markdown 작업/리뷰/검증 기록은 포함한다.
+- 기존 Git은 main 브랜치·커밋 없음·원격 없음이었다. `.gitignore`에 `/docs/init/`을 추가하고 로컬 원본은 유지한다.
+- 최초 게시 결과와 실제 clone 검증은 성공을 확인한 후 별도 기록한다. AWS/DB 작업은 수행하지 않는다.

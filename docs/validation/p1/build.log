@@ -1,0 +1,12 @@
+  ShooterRecordsLab.Domain -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/bin/Debug/net10.0/ShooterRecordsLab.Domain.dll
+  ShooterRecordsLab.Application -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/bin/Debug/net10.0/ShooterRecordsLab.Application.dll
+  ShooterRecordsLab.Infrastructure -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/bin/Debug/net10.0/ShooterRecordsLab.Infrastructure.dll
+  ShooterRecordsLab.UnitTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/bin/Debug/net10.0/ShooterRecordsLab.UnitTests.dll
+  ShooterRecordsLab.Api -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/bin/Debug/net10.0/ShooterRecordsLab.Api.dll
+  ShooterRecordsLab.IntegrationTests -> /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/bin/Debug/net10.0/ShooterRecordsLab.IntegrationTests.dll
+
+빌드했습니다.
+    경고 0개
+    오류 0개
+
+경과 시간: 00:00:02.27

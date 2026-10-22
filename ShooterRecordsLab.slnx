@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj" />
+    <Project Path="src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj" />
+    <Project Path="src/ShooterRecordsLab.Domain/ShooterRecordsLab.Domain.csproj" />
+    <Project Path="src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj" />
+    <Project Path="tests/ShooterRecordsLab.UnitTests/ShooterRecordsLab.UnitTests.csproj" />
+  </Folder>
+</Solution>

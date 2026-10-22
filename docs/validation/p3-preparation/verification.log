@@ -1,0 +1,88 @@
+Command: terraform version
+Terraform v1.17.0
+on darwin_arm64
+
+Command: terraform -chdir=infra/terraform init -backend=false -input=false -no-color
+Initializing provider plugins...
+- Reusing version 6.70.0 of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/aws v6.70.0
+
+Terraform has been successfully initialized!
+Command: terraform -chdir=infra/terraform fmt -check -recursive
+Command: terraform -chdir=infra/terraform validate -no-color
+Success! The configuration is valid.
+
+Command: terraform -chdir=infra/terraform test -no-color
+tests/draft.tftest.hcl... in progress
+  run "draft_is_private_and_has_no_inbound_to_relay"... pass
+  run "missing_configuration_review_fails"... pass
+  run "same_database_az_fails"... pass
+  run "wrong_engine_family_fails"... pass
+  run "unset_budget_fails"... pass
+tests/draft.tftest.hcl... tearing down
+tests/draft.tftest.hcl... pass
+
+Success! 5 passed, 0 failed.
+Command: python3 infra/scripts/estimate-aws-cost.py
+{
+  "region": "ap-northeast-2",
+  "retrieved_date_kst": "2026-10-23",
+  "warning": "Illustrations only, NOT a spending ceiling or approved configuration. No free tier, discounts, taxes or exchange rates assumed.",
+  "excluded_variable_charges": [
+    "RDS T3 surplus CPU credits",
+    "billable backup/snapshot GB-month",
+    "Secrets API calls and additional secrets",
+    "KMS requests",
+    "network transfer",
+    "optional logs/ECR/other services",
+    "existing account charges"
+  ],
+  "scenarios": [
+    {
+      "name": "A_micro_730h",
+      "running_hours": 730,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "22.63",
+        "ec2_t3_micro": "9.49",
+        "one_public_ipv4": "3.65",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "39.52"
+    },
+    {
+      "name": "B_small_730h",
+      "running_hours": 730,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "45.26",
+        "ec2_t3_micro": "9.49",
+        "one_public_ipv4": "3.65",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "62.15"
+    },
+    {
+      "name": "C_small_60h_illustration_only",
+      "running_hours": 60,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "3.72",
+        "ec2_t3_micro": "0.78",
+        "one_public_ipv4": "0.30",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "8.55"
+    }
+  ],
+  "variable_charge_examples_usd": {
+    "rds_100_surplus_vcpu_hours": "14.40",
+    "backup_20_billable_gb_month": "1.90"
+  }
+}

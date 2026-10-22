@@ -1,0 +1,26 @@
+tests/draft.tftest.hcl... in progress
+  run "draft_is_private_and_has_no_inbound_to_relay"... fail
+
+Error: Unknown condition value
+
+  on tests/draft.tftest.hcl line 43, in run "draft_is_private_and_has_no_inbound_to_relay":
+  43:     condition     = length(aws_security_group.relay.ingress) == 0 && length(aws_route_table.database.route) == 0
+    ├────────────────
+    │ aws_route_table.database.route is a set of object
+    │ aws_security_group.relay.ingress is a set of object
+
+Condition expression could not be evaluated at this time. This means you have
+executed a `run` block with `command = plan` and one of the values your
+condition depended on is not known until after the plan has been applied.
+Either remove this value from your condition, or execute an `apply` command
+from this `run` block. Alternatively, if there is an override for this value,
+you can make it available during the plan phase by setting `override_during =
+plan` in the `override_` block.
+  run "missing_execution_approval_fails"... skip
+  run "same_database_az_fails"... skip
+  run "wrong_engine_family_fails"... skip
+  run "unset_budget_fails"... skip
+tests/draft.tftest.hcl... tearing down
+tests/draft.tftest.hcl... fail
+
+Failure! 0 passed, 1 failed, 4 skipped.

@@ -1,0 +1,26 @@
+  복원할 프로젝트를 확인하는 중...
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Domain/ShooterRecordsLab.Domain.csproj을(를) 42밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Application/ShooterRecordsLab.Application.csproj을(를) 45밀리초 동안 복원했습니다.
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.UnitTests/ShooterRecordsLab.UnitTests.csproj을(를) 91밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj을(를) 111밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj을(를) 111밀리초 동안 복원했습니다.
+  /Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj을(를) 110밀리초 동안 복원했습니다.
+
+빌드하지 못했습니다.
+
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj : error NU1902: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 보통 심각도 취약성인 https://github.com/advisories/GHSA-2fmv-rv2c-59x7이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Api/ShooterRecordsLab.Api.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/tests/ShooterRecordsLab.IntegrationTests/ShooterRecordsLab.IntegrationTests.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/src/ShooterRecordsLab.Infrastructure/ShooterRecordsLab.Infrastructure.csproj : error NU1903: 'System.Security.Cryptography.Pkcs' 9.0.11 패키지에 알려진 높음 심각도 취약성인 https://github.com/advisories/GHSA-846f-f764-76mx이(가) 있습니다. [/Users/switch/Development/Web/ASP.NET Core ShooterRecordsLab/ShooterRecordsLab.slnx]
+    경고 0개
+    오류 6개
+
+경과 시간: 00:00:00.91

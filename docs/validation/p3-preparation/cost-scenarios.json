@@ -1,0 +1,62 @@
+{
+  "region": "ap-northeast-2",
+  "retrieved_date_kst": "2026-10-23",
+  "warning": "Illustrations only, NOT a spending ceiling or approved configuration. No free tier, discounts, taxes or exchange rates assumed.",
+  "excluded_variable_charges": [
+    "RDS T3 surplus CPU credits",
+    "billable backup/snapshot GB-month",
+    "Secrets API calls and additional secrets",
+    "KMS requests",
+    "network transfer",
+    "optional logs/ECR/other services",
+    "existing account charges"
+  ],
+  "scenarios": [
+    {
+      "name": "A_micro_730h",
+      "running_hours": 730,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "22.63",
+        "ec2_t3_micro": "9.49",
+        "one_public_ipv4": "3.65",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "39.52"
+    },
+    {
+      "name": "B_small_730h",
+      "running_hours": 730,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "45.26",
+        "ec2_t3_micro": "9.49",
+        "one_public_ipv4": "3.65",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "62.15"
+    },
+    {
+      "name": "C_small_60h_illustration_only",
+      "running_hours": 60,
+      "approved": false,
+      "components_usd": {
+        "rds_compute": "3.72",
+        "ec2_t3_micro": "0.78",
+        "one_public_ipv4": "0.30",
+        "rds_gp3_20gib_full_month": "2.62",
+        "ebs_gp3_8gib_full_month": "0.73",
+        "one_managed_master_secret_full_month": "0.40"
+      },
+      "base_total_usd": "8.55"
+    }
+  ],
+  "variable_charge_examples_usd": {
+    "rds_100_surplus_vcpu_hours": "14.40",
+    "backup_20_billable_gb_month": "1.90"
+  }
+}
