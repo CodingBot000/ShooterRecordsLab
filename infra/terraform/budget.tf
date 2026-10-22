@@ -1,5 +1,6 @@
 # A budget is a notification, not an automatic stop or billing guarantee.
 resource "aws_budgets_budget" "account" {
+  count        = var.enable_budget_notifications ? 1 : 0
   depends_on   = [aws_vpc.lab]
   name         = "${var.name_prefix}-monthly-account"
   budget_type  = "COST"

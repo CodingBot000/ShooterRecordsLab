@@ -31,7 +31,7 @@ curl -i http://127.0.0.1:5080/health/ready
 curl -i http://127.0.0.1:5080/openapi/v1.json
 ```
 
-개발 프로필은 `127.0.0.1:5080`에 바인딩합니다. DB 없이 live는 200, ready는 503입니다. OpenAPI는 Development에서만 노출합니다. 실제 데이터 API는 SQL Server 연결이 필요하며 P1의 메모리 Fake는 현재 **테스트 프로젝트에만** 있습니다. 쓰기 API는 JWT 완성 전까지 Development에서만 허용하며 다른 환경에서는 404를 반환합니다.
+개발 프로필은 `127.0.0.1:5080`에 바인딩합니다. DB 없이 live는 200, ready는 503입니다. OpenAPI는 Development에서만 노출합니다. 실제 데이터 API는 SQL Server 연결이 필요하며 P1의 메모리 Fake는 현재 **테스트 프로젝트에만** 있습니다. 쓰기 API는 모든 환경에서 JWT와 `scope=matches.write` 권한이 필요합니다.
 
 DB 연결 문자열 키는 `ConnectionStrings:ShooterRecords`입니다. P3 승인 후 .NET user-secrets 또는 외부 환경 설정으로 제공하며 실제 값을 파일/터미널 기록/로그에 노출하지 않습니다. 서버·DB, TLS 암호화·서버 인증서 검증, MARS 비활성화를 검사합니다. SSM 터널은 `HostNameInCertificate`에 실제 승인된 RDS 인증서 호스트명을 사용해야 합니다. [접속·승인 지침](docs/aws-deployment.md)을 먼저 확인합니다.
 
@@ -46,6 +46,7 @@ curl -i 'http://127.0.0.1:5080/api/players/11111111-1111-1111-1111-111111111111/
 curl -i 'http://127.0.0.1:5080/api/rankings?top=20'
 curl -i http://127.0.0.1:5080/api/matches \
   -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $VALIDATION_TOKEN" \
   -d '{"externalMatchId":"DEMO-MATCH-0001","playedAtUtc":"2026-10-21T12:30:00Z","participants":[{"playerId":"11111111-1111-1111-1111-111111111111","kills":8,"deaths":3,"outcome":"Win"},{"playerId":"22222222-2222-2222-2222-222222222222","kills":3,"deaths":8,"outcome":"Loss"}]}'
 ```
 
@@ -99,3 +100,9 @@ python3 infra/scripts/estimate-aws-cost.py
 ```
 
 이 검증은 로컬 schema/format·AWS mock의 plan-only 테스트입니다. 실제 계정 plan/apply/destroy·DB 연결·IAM/Budget 설정은 실행하지 않습니다. Terraform 입력 example은 의도적으로 미완성입니다.
+
+## 배포·인증 검증 준비
+
+`infra/docker/Dockerfile`은 버전/digest를 고정한 Linux x86_64 빌드·비root 런타임과 AWS RDS 인증서 검증을 구성합니다. 키·토큰·DB 연결 문자열은 이미지/소스에 포함하지 않습니다. `Authentication:Jwt` 설정은 외부 비밀 저장소에서 주입하며, 검증 전용 Staging 토큰은 Production 인증 서버를 대신하지 않습니다. 공개 JWT 발급 API는 제공하지 않습니다.
+
+클라우드 검증 보고서는 `infra/scripts/export-validation-evidence.py`의 허용된 필드만 공개합니다. 원본 AWS 출력·계정·주소·자원 ID·비밀·Terraform state/plan은 Git에 넣지 않습니다. 실제 실행 결과는 완료 후 검증 기록에 반영합니다.

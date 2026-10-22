@@ -13,3 +13,13 @@ output "master_secret_arn" {
   sensitive   = true
   description = "Reference only. No password is read by Terraform or granted to the EC2 role."
 }
+
+output "application_repository_url" {
+  value     = var.enable_container_deployment ? aws_ecr_repository.application[0].repository_url : null
+  sensitive = true
+}
+
+output "application_secret_arn" {
+  value     = var.enable_container_deployment ? aws_secretsmanager_secret.application[0].arn : null
+  sensitive = true
+}

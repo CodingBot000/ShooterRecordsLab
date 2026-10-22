@@ -1,0 +1,16 @@
+**
+!global.json
+!NuGet.Config
+!Directory.Build.props
+!ShooterRecordsLab.slnx
+!src/
+!src/**
+!tests/
+!tests/**
+!tools/
+!tools/**
+**/bin
+**/obj
+**/*.local.json
+**/secrets.json
+**/.env*

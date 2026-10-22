@@ -99,3 +99,24 @@ run "unset_budget_fails" {
   }
   expect_failures = [var.monthly_budget_usd]
 }
+
+run "explicit_ephemeral_validation_can_be_fully_cleaned" {
+  command = plan
+  variables {
+    ephemeral_validation_enabled = true
+    enable_container_deployment  = true
+    enable_budget_notifications  = false
+    backup_retention_days        = 0
+    monthly_budget_usd           = 0
+    budget_alert_email           = ""
+    final_snapshot_identifier    = ""
+  }
+  assert {
+    condition     = !aws_db_instance.database.deletion_protection && aws_db_instance.database.skip_final_snapshot && aws_db_instance.database.delete_automated_backups && aws_db_instance.database.backup_retention_period == 0
+    error_message = "Explicit disposable validation must not retain database backups or snapshots."
+  }
+  assert {
+    condition     = length(aws_budgets_budget.account) == 0 && aws_ecr_repository.application[0].force_delete && aws_secretsmanager_secret.application[0].recovery_window_in_days == 0
+    error_message = "Explicit cleanup must cover images and the application secret, without unrequested email configuration."
+  }
+}

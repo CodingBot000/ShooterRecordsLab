@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShooterRecordsLab.Api.Authentication;
 using ShooterRecordsLab.Api.Contracts;
 using ShooterRecordsLab.Application;
 using ShooterRecordsLab.Application.Matches;
@@ -7,7 +9,7 @@ namespace ShooterRecordsLab.Api.Controllers;
 
 [ApiController]
 [Route("api/matches")]
-public sealed class MatchesController(MatchService service, ILogger<MatchesController> logger, IWebHostEnvironment environment) : ControllerBase
+public sealed class MatchesController(MatchService service, ILogger<MatchesController> logger) : ControllerBase
 {
     [HttpGet("{matchId:guid}")]
     public async Task<ActionResult<MatchResponse>> Get(Guid matchId, CancellationToken cancellationToken)
@@ -23,13 +25,9 @@ public sealed class MatchesController(MatchService service, ILogger<MatchesContr
     }
 
     [HttpPost]
+    [Authorize(Policy = JwtAuthentication.WritePolicy)]
     public async Task<ActionResult<RegisterMatchResponse>> Register(RegisterMatchRequest request, CancellationToken cancellationToken)
     {
-        if (!environment.IsDevelopment())
-        {
-            return NotFound();
-        }
-
         if (request.Participants?.Any(p => p is null) == true)
         {
             throw new RecordsException("INVALID_PARTICIPANTS", "Participants must not contain null entries.");

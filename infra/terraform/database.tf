@@ -33,12 +33,12 @@ resource "aws_db_instance" "database" {
   parameter_group_name            = aws_db_parameter_group.database.name
   username                        = "lab_admin"
   manage_master_user_password     = true
-  backup_retention_period         = var.backup_retention_days
+  backup_retention_period         = var.ephemeral_validation_enabled ? 0 : var.backup_retention_days
   copy_tags_to_snapshot           = true
-  delete_automated_backups        = false
-  deletion_protection             = true
-  skip_final_snapshot             = false
-  final_snapshot_identifier       = var.final_snapshot_identifier
+  delete_automated_backups        = var.ephemeral_validation_enabled
+  deletion_protection             = !var.ephemeral_validation_enabled
+  skip_final_snapshot             = var.ephemeral_validation_enabled
+  final_snapshot_identifier       = var.ephemeral_validation_enabled ? null : var.final_snapshot_identifier
   apply_immediately               = false
   allow_major_version_upgrade     = false
   auto_minor_version_upgrade      = false
@@ -46,7 +46,4 @@ resource "aws_db_instance" "database" {
   monitoring_interval             = 0
   enabled_cloudwatch_logs_exports = []
 
-  lifecycle {
-    prevent_destroy = true
-  }
 }

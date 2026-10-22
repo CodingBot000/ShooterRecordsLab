@@ -37,3 +37,7 @@ crash.log
 
 # Local initialization originals; operational docs are committed
 /docs/init/
+
+# Python helper caches
+__pycache__/
+*.py[cod]

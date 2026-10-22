@@ -148,3 +148,11 @@
 - 새 clone에는 `docs/init/`이 없고 Markdown 16개가 있는 상태에서 검증했다. SDK 10.0.402/macOS Arm64, 기존 로컬 NuGet 캐시는 사용했다. 실제 SQL/AWS 테스트는 실행하지 않았다.
 - 증거: [clone 기록](validation/github-publication/clone.log), [전체 검증](validation/github-publication/fresh-clone-verification.log), [커밋·환경 메타데이터](validation/github-publication/fresh-clone-metadata.json), [공개 대상 확인](validation/github-publication/publication-checks.log).
 - 이 기록은 검증된 소스 커밋 뒤에 문서·증거만 추가하는 별도 커밋으로 보존한다. 실제 AWS 배포/DB 검증은 여전히 미실행이다.
+
+## 실제 클라우드 검증을 위한 코드 준비 — 2026-10-23
+
+- JWT Bearer/쓰기 scope와 401/403 ProblemDetails, 안전한 구성 검증을 구현했다. 로컬 및 Linux x86_64 컨테이너에서 단위 10 + HTTP 83 = 93 통과, 실패/skip 0, 빌드 경고/오류 0, format 성공.
+- 공식 이미지/CA bundle digest 고정 Docker 빌드, 비root/읽기 전용/health probe와 인증·미구성 readiness 경계를 확인했다. 명시적 검증용 SQL 준비/실행 계획 측정 도구는 소스에 추가하되 자격정보는 포함하지 않는다.
+- Terraform 모의 테스트 6개가 통과했다. 일회성 정리 모드의 retained-backup 플래그가 적용되지 않던 실패를 수정한 후 재검증했다. 실제 계정 plan은 신규 자원만 포함하고 기존 자원 변경이 없음을 비공개로 검토했다.
+- 새 공개 증거는 허용된 날짜/코드·이미지 content hash/검증 항목·수치만 남긴다. 계정·AWS 식별자·주소·비밀·원본 plan/state/로그를 공개하지 않는다. 준비 결과: [checks.json](validation/pre-deployment/checks.json).
+- 이 시점의 실제 AWS 배포·실DB 테스트는 아직 미실행이며 실제 결과는 실행 후 기록한다.

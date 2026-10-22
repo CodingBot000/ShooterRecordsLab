@@ -110,3 +110,15 @@
 - `/docs/init/`은 `.gitignore`에 포함하고 로컬 원본은 보존한다. 이 폴더 외 에이전트 작업 흔적을 담은 Markdown(AGENTS/의사결정/리뷰/상태/운영 문서 등)은 모두 포함한다.
 - 소스·테스트·IaC·허용된 검증 로그도 포함한다. 자격증명·개인 설정·Terraform state/plan·빌드 산출물은 기존 무시 규칙에 따라 제외한다.
 - GitHub 공개는 AWS 생성/DB 적용/배포 승인이 아니다. 현재 실제 AWS/실DB 검증은 미실행 상태로 공개한다.
+
+## ADR-010 — 승인된 실환경 검증과 공개 증거의 범위
+
+- 날짜: 2026-10-23 / 상태: 사용자 승인 및 구현 진행
+- 사용자 승인: 서울 리전에서 실제 배포·테스트, RDS small + EC2 micro, 1회 비용 관리 기준 $3·최대 4시간. 이는 강제 청구 상한이 아니다. 이번 검증에서 새로 만든 데이터/자원만 대상으로 정리하며 기존 자원은 변경하지 않는다.
+- 계정·자격증명·접속 주소·AWS 식별자·원본 state/plan/로그·토큰은 공개하지 않는다. 공개 증거는 검증 일자·소스 커밋·이미지 내용 digest·고정된 검증 항목·개수·수치로 제한한다. 원본은 Git 밖의 권한 제한 저장소에서 처리한다.
+- 공개 문서는 실제 배포·검증 사실을 기술한다. 상시 운영·공개 서비스·장기 안정성을 검증하지 않고 그런 표현을 사용하지 않는다.
+- 인증: Microsoft.AspNetCore.Authentication.JwtBearer 10.0.13(Microsoft, MIT). HS256 서명·issuer/audience/expiry 검증, 정확한 `scope`의 `matches.write` 토큰에만 POST 허용. 자체 토큰 발급 API는 만들지 않는다. 실환경 검증용 key/issuer는 폐쇄된 Staging 테스트 전용이며 ValidationOnly 설정은 Production에서 거부한다. 실제 공개 서비스에는 신뢰할 발급자 통합이 별도 필요하다.
+- 컨테이너: 공식 SDK/runtime 패치와 manifest digest 고정, Linux x86_64, 비root/읽기 전용·권한 최소화, AWS 공개 CA bundle의 checksum 고정. Mac 시스템 신뢰 저장소를 변경하지 않고 컨테이너 안에서 RDS TLS를 검증한다.
+- 단기 검증의 Terraform 모드는 사용자 선택에 따라 데이터/백업/스냅샷/이미지/시크릿의 보존을 하지 않는다. 일반 모드 기본값은 보호/보존을 유지한다. 예산 이메일 수신자가 미지정인 단기 검증에서는 이메일 Budget 생성 대신 명시적인 로컬 시간·비용 관리 기준을 사용한다.
+- ECR와 애플리케이션 전용 secret 접근만 EC2 역할에 추가한다. DB master secret 권한을 EC2에 주지 않으며 secret 값은 Terraform state에 넣지 않는다.
+- 생성 전에 JWT/컨테이너/모의 IaC 검증을 마쳐 유료 자원의 대기 시간을 줄인다. P3 실제 SQL 검증과 P5 배포 검증 결과는 실제 실행한 뒤 기록한다.

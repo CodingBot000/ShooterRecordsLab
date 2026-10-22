@@ -56,3 +56,9 @@ aws --profile "$APPROVED_PROFILE" --region ap-northeast-2 rds describe-orderable
 SSM Online/SG/private endpoint·암호화·TLS parameter 적용을 확인한다. 승인된 Dev/Test DB·최소권한 사용자를 만들고 Migration/seed/실DB 테스트를 수행한다. 관리 계정을 API에 넣지 않는다. [DB 검증 안내](../../docs/database-validation.md)와 [AWS runbook](../../docs/aws-deployment.md)을 따른다.
 
 중지/삭제·최종 snapshot/retained backup/EBS/secret 보존과 종료 시점은 미정이다. 리소스 생성 승인 때 함께 정해야 하며, 승인 없이 자동 destroy/cleanup/주기 작업을 설정하지 않는다.
+
+## 승인된 단일 검증 모드
+
+`ephemeral_validation_enabled=true`는 이번 사용자 승인 범위의 새 자원/가상 데이터에만 사용합니다. 이 모드는 최종 snapshot/자동 backup 보존을 하지 않으며 삭제 보호를 해제합니다. 일반 모드는 기존 보호 기본값을 유지합니다. 이전의 무조건 prevent_destroy 대신 일반 모드의 AWS deletion protection과 실행 승인 경계를 사용합니다.
+
+`enable_container_deployment=true`는 private ECR와 애플리케이션 전용 secret metadata·제한된 역할 권한을 추가합니다. secret 값은 Terraform 밖에서 주입합니다. 단기 검증은 `enable_budget_notifications=false`로 수신자가 정해지지 않은 이메일을 만들지 않으며 승인된 로컬 시간/비용 기준을 적용합니다. 실제 계정 설정은 저장소 밖의 private 작업 공간에서만 사용합니다.

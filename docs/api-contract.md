@@ -96,7 +96,7 @@
 
 ## 5. POST /api/matches
 
-인증: `Authorization: Bearer <signed_jwt>` + `matches.write` 권한(토큰의 scope/permissions mapping은 구현 시 하나로 고정하여 문서화).
+인증: `Authorization: Bearer <signed_jwt>`. `scope` claim의 공백으로 구분한 항목 중 정확한 `matches.write`가 있어야 한다. issuer/audience/HS256 signature/expiry/nbf를 검증하고 clock skew는 0이다. 숫자·유사 접두 권한은 허용하지 않는다.
 
 **요청**
 
@@ -194,10 +194,11 @@
 
 각 API는 성공/경계/오류 사례를 HTTP integration에서 검증한다. `POST` 중복은 **동시 요청**도 실제 SQL Server에 대해 검증한다. JSON 필드 이름, null 처리, 정확한 상태 코드 및 정렬을 확인한다. 운영 기록/개인정보 대신 테스트용 임의 Player ID만 사용한다.
 
-## 단계별 실행 범위 (P2 현재)
+## 단계별 실행 범위 (JWT 구현 이후)
 
 - P1의 Fake는 P2에서 테스트 프로젝트로 이동했다. 현재 실행 API는 EF SQL Server 저장소만 등록한다. 앱 기동 시 Migration/seed는 실행하지 않는다.
-- 조회 Controller는 환경에 관계없이 제공하되 실제 DB 연결이 필요하다. JWT 구현 전 `POST /api/matches`는 Development에서만 허용하며 다른 환경에서는 404를 반환한다. OpenAPI는 Development 한정이다.
+- 조회 Controller는 환경에 관계없이 제공하되 실제 DB 연결이 필요하다. `POST /api/matches`는 모든 환경에서 JWT 인증·쓰기 권한을 요구한다. OpenAPI는 Development 한정이다.
+- Authentication:Jwt의 Issuer/Audience/SigningKeyBase64는 외부 비밀 설정으로 전달한다. signing key는 최소 32 bytes다. Staging/Production에는 올바른 구성이 필수이며, Development에서 구성이 비어 있으면 조회/health만 사용할 수 있고 쓰기는 fail closed다. ValidationOnly key 설정은 Production에서 거부한다.
 - POST 필드는 모두 필수다. UTC 오프셋 없는 시각, 숫자 enum/정확한 이름이 아닌 outcome, null 참가자, 누락 JSON 필드는 400이다. ASCII 검증은 대문자 변환 **이전**에 수행해 Unicode 문자가 ASCII로 접히는 경우를 차단한다.
 - 참가자 정렬은 .NET Guid 순서, EF SQL Server의 경기 목록과 랭킹 UUID 정렬은 SQL Server uniqueidentifier 순서다. 각 경로는 일관된 2차 키를 사용한다.
 - 실제 MSSQL 실행/제약/동시성/실행 계획은 P3에서 검증하기 전까지 미검증이다.

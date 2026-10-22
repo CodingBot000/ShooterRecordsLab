@@ -109,8 +109,8 @@ variable "backup_retention_days" {
   type        = number
   description = "User-approved automated backup retention; mandatory, no assumed retention policy."
   validation {
-    condition     = var.backup_retention_days >= 1 && var.backup_retention_days <= 35 && var.backup_retention_days == floor(var.backup_retention_days)
-    error_message = "Choose 1..35 days; disabling backups needs a separate design decision."
+    condition     = var.ephemeral_validation_enabled ? var.backup_retention_days == 0 : (var.backup_retention_days >= 1 && var.backup_retention_days <= 35 && var.backup_retention_days == floor(var.backup_retention_days))
+    error_message = "Choose 1..35 days normally; explicitly approved ephemeral validation requires zero."
   }
 }
 
@@ -118,7 +118,7 @@ variable "final_snapshot_identifier" {
   type        = string
   description = "Explicit approved final snapshot name for eventual deletion; deletion itself is separately authorized."
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]{2,62}$", var.final_snapshot_identifier)) && !endswith(var.final_snapshot_identifier, "-") && !strcontains(var.final_snapshot_identifier, "--")
+    condition     = var.ephemeral_validation_enabled ? true : (can(regex("^[a-z][a-z0-9-]{2,62}$", var.final_snapshot_identifier)) && !endswith(var.final_snapshot_identifier, "-") && !strcontains(var.final_snapshot_identifier, "--"))
     error_message = "Provide a valid explicit final snapshot identifier."
   }
 }
@@ -127,7 +127,7 @@ variable "monthly_budget_usd" {
   type        = number
   description = "User-approved monthly account COST budget in USD. Notification only, never a spending cap."
   validation {
-    condition     = var.monthly_budget_usd > 0
+    condition     = !var.enable_budget_notifications || var.monthly_budget_usd > 0
     error_message = "A user-approved positive monthly budget is required."
   }
 }
@@ -137,7 +137,25 @@ variable "budget_alert_email" {
   sensitive   = true
   description = "User-selected recipient for AWS Budget actual/forecast alerts; no emails are sent by local validation."
   validation {
-    condition     = can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.budget_alert_email))
+    condition     = !var.enable_budget_notifications || can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.budget_alert_email))
     error_message = "Specify the approved budget alert recipient outside committed files."
   }
+}
+
+variable "ephemeral_validation_enabled" {
+  type        = bool
+  default     = false
+  description = "Only after explicit consent: disposable test data, no final snapshot/retained backups, deletion allowed."
+}
+
+variable "enable_budget_notifications" {
+  type        = bool
+  default     = true
+  description = "Budget email requires an approved recipient; one-off validation can use an explicit local cost/time control instead."
+}
+
+variable "enable_container_deployment" {
+  type        = bool
+  default     = false
+  description = "Create a private ECR repository and application-only secret reference for the EC2 container."
 }

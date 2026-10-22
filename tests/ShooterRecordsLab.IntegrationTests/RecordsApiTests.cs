@@ -137,6 +137,7 @@ public sealed class RecordsApiTests
     {
         await using var factory = CreateFactory();
         using var client = factory.CreateClient();
+        TestTokens.Authorize(client);
         using var content = new StringContent(json, Encoding.UTF8, "application/json");
         using var response = await client.PostAsync("/api/matches", content, CancellationToken.None);
         await AssertProblem(response, 400);
@@ -185,12 +186,12 @@ public sealed class RecordsApiTests
     }
 
     [Fact]
-    public async Task Production_does_not_expose_unauthenticated_development_writes()
+    public async Task Production_rejects_unauthenticated_writes()
     {
         await using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder.WithoutExternalDatabase().UseEnvironment("Production"));
         using var client = factory.CreateClient();
-        using var response = await Post(client, Payload("production"));
-        await AssertProblem(response, 404);
+        using var response = await client.PostAsJsonAsync("/api/matches", Payload("production"), CancellationToken.None);
+        await AssertProblem(response, 401);
     }
 
     [Theory]
@@ -252,7 +253,11 @@ public sealed class RecordsApiTests
         return new { externalMatchId = externalId, playedAtUtc = time, participants = reverse ? participants.Reverse().ToArray() : participants };
     }
 
-    private static Task<HttpResponseMessage> Post(HttpClient client, object payload) => client.PostAsJsonAsync("/api/matches", payload, CancellationToken.None);
+    private static Task<HttpResponseMessage> Post(HttpClient client, object payload)
+    {
+        TestTokens.Authorize(client);
+        return client.PostAsJsonAsync("/api/matches", payload, CancellationToken.None);
+    }
 
     private static async Task<JsonElement> GetJson(HttpClient client, string path)
     {
