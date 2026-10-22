@@ -204,9 +204,28 @@ static async Task RunPerformance(SqlConnection connection, CancellationToken tok
                 {
                     while (await reader.ReadAsync(token))
                     {
-                        if (reader.FieldCount == 1 && reader.GetDataTypeName(0) == "xml")
+                        string? planText = null;
+                        if (reader.FieldCount == 1)
                         {
-                            var xml = XDocument.Parse(reader.GetSqlXml(0).Value);
+                            if (reader.GetDataTypeName(0) == "xml")
+                            {
+                                planText = reader.GetSqlXml(0).Value;
+                            }
+                            else if (reader.GetValue(0) is string candidate && candidate.Contains("<ShowPlanXML", StringComparison.Ordinal))
+                            {
+                                planText = candidate;
+                            }
+                        }
+
+                        if (planText is not null)
+                        {
+                            var planDirectory = Environment.GetEnvironmentVariable("VALIDATION_PLAN_DIRECTORY");
+                            if (planDirectory == "/results")
+                            {
+                                await File.WriteAllTextAsync(Path.Combine(planDirectory, name + "-private.xml"), planText, token);
+                            }
+
+                            var xml = XDocument.Parse(planText);
                             operators += xml.Descendants().Count(n => n.Name.LocalName == "RelOp");
                             actualCounters += xml.Descendants().Count(n => n.Name.LocalName == "RunTimeCountersPerThread");
                         }

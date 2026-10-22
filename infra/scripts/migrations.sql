@@ -152,3 +152,32 @@ END;
 
 COMMIT;
 GO
+
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261022162547_FixExternalMatchIdCharacterSet'
+)
+BEGIN
+    ALTER TABLE [dbo].[Matches] DROP CONSTRAINT [CK_Matches_ExternalMatchId];
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261022162547_FixExternalMatchIdCharacterSet'
+)
+BEGIN
+    EXEC(N'ALTER TABLE [dbo].[Matches] ADD CONSTRAINT [CK_Matches_ExternalMatchId] CHECK (DATALENGTH([ExternalMatchId]) BETWEEN 2 AND 128 AND [ExternalMatchId] COLLATE Latin1_General_100_BIN2 NOT LIKE N''%[^-A-Z0-9_]%'')');
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20261022162547_FixExternalMatchIdCharacterSet'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20261022162547_FixExternalMatchIdCharacterSet', N'10.0.13');
+END;
+
+COMMIT;
+GO

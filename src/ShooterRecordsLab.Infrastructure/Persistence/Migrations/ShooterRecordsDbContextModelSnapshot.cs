@@ -55,7 +55,7 @@ namespace ShooterRecordsLab.Infrastructure.Persistence.Migrations
                         {
                             t.HasCheckConstraint("CK_Matches_CreatedAtUtc", "DATEPART(TZOFFSET, [CreatedAtUtc]) = 0");
 
-                            t.HasCheckConstraint("CK_Matches_ExternalMatchId", "DATALENGTH([ExternalMatchId]) BETWEEN 2 AND 128 AND [ExternalMatchId] COLLATE Latin1_General_100_BIN2 NOT LIKE N'%[^A-Z0-9_-]%'");
+                            t.HasCheckConstraint("CK_Matches_ExternalMatchId", "DATALENGTH([ExternalMatchId]) BETWEEN 2 AND 128 AND [ExternalMatchId] COLLATE Latin1_General_100_BIN2 NOT LIKE N'%[^-A-Z0-9_]%'");
 
                             t.HasCheckConstraint("CK_Matches_Fingerprint", "DATALENGTH([PayloadFingerprint]) = 64 AND [PayloadFingerprint] COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^A-F0-9]%'");
 
