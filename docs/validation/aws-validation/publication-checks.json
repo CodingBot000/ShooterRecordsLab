@@ -6,5 +6,7 @@
   "credentialPatternMatches": 0,
   "rawCloudArtifactsCommitted": false,
   "docsInitCommitted": false,
-  "markdownFilesIncluded": 18
+  "markdownFilesIncluded": 18,
+  "historyPatternCheck": "PASS",
+  "historyBlobsReviewed": 210
 }
