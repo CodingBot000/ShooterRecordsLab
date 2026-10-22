@@ -37,3 +37,7 @@
 - JWT issuer/audience/권한 mapping·토큰 실패, 공개 API 크기/rate limits·성능·실행 계획, 운영 관측성/연결 장애·commit 유실은 P4 검증 대상이다. Development의 미인증 쓰기는 외부 공개하면 안 된다.
 - AWS 계정/리전·월 예산·RDS/EC2 사양·보존/정리와 실행 승인은 미정이다. 이 세션에서 AWS/DB 변경·실배포를 수행하지 않았다.
 - 최초 커밋이 없어 실제 fresh clone/커밋 SHA 검증은 없다. 소스만 복사한 깨끗한 디렉터리에서 locked restore/build/test/format을 재현했다.
+
+## 후속 확인 — 2026-10-23 00:51 KST
+
+공개 GitHub 저장소의 최초 소스 커밋 `eee0b6f5926484398e027cdb02d34063a3270e71`를 실제 HTTPS clone하여 restore/build/비DB 테스트 81개/format을 통과했다. 위 리뷰의 “최초 커밋·실제 fresh clone 없음” 한계는 이 후속 확인으로 해소되었다. 실제 SQL Server/AWS/배포 검증과 같은 세션 리뷰의 독립성 한계는 그대로 남는다. 증거는 `docs/validation/github-publication/`에 있다.

@@ -1,0 +1,28 @@
+{
+  "verifiedAtKst": "2026-10-23T00:50:26.190174+09:00",
+  "repository": "https://github.com/CodingBot000/ShooterRecordsLab",
+  "commit": "eee0b6f5926484398e027cdb02d34063a3270e71",
+  "cloneSource": "GitHub HTTPS remote, depth 1",
+  "docsInitPresent": false,
+  "markdownCount": 16,
+  "markdownFiles": [
+    "AGENTS.md",
+    "README.md",
+    "docs/api-contract.md",
+    "docs/architecture.md",
+    "docs/aws-cost-estimate.md",
+    "docs/aws-deployment.md",
+    "docs/database-validation.md",
+    "docs/decisions.md",
+    "docs/development-plan.md",
+    "docs/dotnet-guidelines.md",
+    "docs/project-status.md",
+    "docs/review-guidelines.md",
+    "docs/reviews/p2-review.md",
+    "docs/security-checklist.md",
+    "docs/testing-guidelines.md",
+    "infra/terraform/README.md"
+  ],
+  "verifyCommand": "./infra/scripts/verify.sh artifacts/fresh-clone",
+  "verifyExitCode": 0
+}

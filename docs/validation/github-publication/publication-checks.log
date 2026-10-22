@@ -1,0 +1,9 @@
+Source commit verified from GitHub: eee0b6f5926484398e027cdb02d34063a3270e71
+Repository: https://github.com/CodingBot000/ShooterRecordsLab
+Visibility: PUBLIC (confirmed by gh repo view)
+Default/upstream branch: main / origin/main
+PASS: docs/init excluded from Git; local original hashes 12/12 preserved
+PASS: all 16 non-generated Markdown files committed
+PASS: selected staged credential-pattern scan, no matches; dummy password fixtures reviewed
+PASS: fresh GitHub clone without docs/init; restore/build/test 81/format, failures 0, skipped 0
+NOT_RUN: actual AWS resources, database access or deployment

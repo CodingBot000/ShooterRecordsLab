@@ -3,8 +3,8 @@
 ## 현재 상태
 
 - 현재 단계: P0/P1/P2 로컬 게이트 완료. P3 서울 견적·IaC 준비 완료, 실제 생성·실DB 검증 전.
-- 마지막 확인: 2026-10-23 00:29 KST
-- 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 GitHub 공개 작업 진행 중.
+- 마지막 확인: 2026-10-23 00:51 KST
+- 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 소스 커밋 `eee0b6f`을 GitHub에서 clone해 검증했다.
 - 환경: macOS 26.5 / Arm64 / SDK 10.0.402 / ASP.NET Core 10.0.13
 - AWS: 공식 공개 요금/문서만 조회. 계정 API 조회·생성·변경·배포 없음. 기존 계정 자원 상태 미확인.
 - AWS 승인/예산: 서울 견적·IaC 준비만 승인. 월 예산/프로파일·사양·실행 미정·미승인.
@@ -13,7 +13,7 @@
 
 | 단계 | 상태 | 근거 | 남은 일 |
 |---|---|---|---|
-| P0 문서/솔루션 | 완료 | 깨끗한 소스 스냅샷 restore/build/test/format 성공 | 실제 clone은 최초 커밋 이후 재검증 가능 |
+| P0 문서/솔루션 | 완료 | 깨끗한 소스 스냅샷 restore/build/test/format 성공 | GitHub 실제 clone 검증 완료(아래 최초 공개 기록) |
 | P1 HTTP/도메인 | 완료 | 단위 10 + HTTP 49, build/format 성공 | SQL 구현은 P2 |
 | P2 EF/MSSQL | 완료(코드·비DB 게이트) | 단위 10 + 비DB 통합 71, SQL 생성·모델 drift 없음 | SQL 실행/동시성은 P3에서 실증 |
 | P3 AWS RDS | 준비 완료 / 실행·DB 게이트 미완료 | 공식 서울 단가·IaC·mock plan 5건 | 예산/계정/사양/보존 확정·실제 plan 검토·실행 승인·실DB 검증 |
@@ -136,3 +136,15 @@
 - 사용자 승인: `ShooterRecordsLab` 신규 저장소의 Public 공개·커밋·푸시. `/docs/init/`만 초기 문서 공개 대상에서 제외하고, 그 밖의 에이전트 Markdown 작업/리뷰/검증 기록은 포함한다.
 - 기존 Git은 main 브랜치·커밋 없음·원격 없음이었다. `.gitignore`에 `/docs/init/`을 추가하고 로컬 원본은 유지한다.
 - 최초 게시 결과와 실제 clone 검증은 성공을 확인한 후 별도 기록한다. AWS/DB 작업은 수행하지 않는다.
+
+## GitHub 최초 공개 및 실제 clone 검증 — 2026-10-23 00:51 KST
+
+- 공개 저장소: https://github.com/CodingBot000/ShooterRecordsLab (`main`). 사용자의 신규 생성·Public·커밋·푸시 승인에 따라 수행했다.
+- 최초 소스 커밋: `eee0b6f5926484398e027cdb02d34063a3270e71`. 원격 생성·main push·tracking 연결 성공을 직접 확인했다.
+- `/docs/init/`은 로컬에 보존하고 Git에서는 제외. 그 밖의 비생성 Markdown 16개(AGENTS/README/운영 문서/결정/상태/리뷰 포함)를 모두 커밋했다. 소스·IaC·테스트·허용된 검증 로그도 포함했다.
+- 커밋 전: 선택적 자격증명 패턴 검사에서 일치 없음. password 패턴은 관리형 password 설정과 의도적인 `do-not-print` 테스트 입력만 확인했다. 이는 전면적인 보안 감사라고 주장하지 않는다.
+- 설정 JSON 2개의 CRLF와 생성 SQL의 마지막 빈 줄을 LF/단일 종료 줄로 정규화했다. 과거 검증 로그는 원문을 보존하며 EOF 빈 줄 경고는 코드 검사 대상과 분리했다.
+- 실제 GitHub HTTPS `git clone --depth 1 https://github.com/CodingBot000/ShooterRecordsLab.git` 후 `./infra/scripts/verify.sh artifacts/fresh-clone` 실행: **PASS**. locked restore, warn-as-error build 경고·오류 0, 단위 10 + 비DB 통합 71 = **81 통과**, 실패/skip 0, format 확인 성공.
+- 새 clone에는 `docs/init/`이 없고 Markdown 16개가 있는 상태에서 검증했다. SDK 10.0.402/macOS Arm64, 기존 로컬 NuGet 캐시는 사용했다. 실제 SQL/AWS 테스트는 실행하지 않았다.
+- 증거: [clone 기록](validation/github-publication/clone.log), [전체 검증](validation/github-publication/fresh-clone-verification.log), [커밋·환경 메타데이터](validation/github-publication/fresh-clone-metadata.json), [공개 대상 확인](validation/github-publication/publication-checks.log).
+- 이 기록은 검증된 소스 커밋 뒤에 문서·증거만 추가하는 별도 커밋으로 보존한다. 실제 AWS 배포/DB 검증은 여전히 미실행이다.
