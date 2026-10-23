@@ -2,8 +2,8 @@
 
 ## 현재 상태
 
-- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 배포·SQL·인증·장애 복구 검증 및 공개 보고서 작성 완료.
-- 마지막 확인: 2026-10-23 01:50 KST
+- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 검증·공개 보고서 완료. Spring Boot 전환 설명서와 README 상단 안내 추가 완료.
+- 마지막 확인: 2026-10-23 KST — 전환 설명서·로컬 비DB 검증 갱신(실환경 검증 시각은 별도 보고서 기준).
 - 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 소스 커밋 `eee0b6f`을 GitHub에서 clone해 검증했다.
 - 환경: macOS 26.5 / Arm64 / SDK 10.0.402 / ASP.NET Core 10.0.13
 - AWS: 실제 EC2 Docker·private RDS SQL Server 2022 검증 결과 확보. 공개 자료에는 계정·주소·자원 식별자·비밀·원본 state/로그를 포함하지 않는다.
@@ -179,3 +179,26 @@ P0~P2 및 P3 준비 기록의 NOT_RUN/미검증 표시는 해당 시점의 사�
 - 검증: `rg -a -i -l --hidden --no-ignore -g '!.git/**' <대상 표현> .`로 대소문자 구분 없이 재검색한 결과 일치 파일 0개(exit 1, 검색 오류 아님). 숨김·Git 무시 파일·빌드 산출물·초기 원본까지 포함하고 Git 내부 이력은 제외했다. `git diff --check` 통과. 문서 변경이므로 빌드·런타임 테스트는 재실행하지 않았다.
 - 별도 자기 리뷰: 수정 문맥과 개발 범위 보존을 확인했다. 동일 세션의 검토이며 독립된 제3자 리뷰는 아니다.
 - 남은 범위·다음 단계: 현재 파일 기준 정리를 완료했다. 과거 커밋 이력은 변경하지 않았다. 커밋·푸시 없이 사용자 검토를 기다린다.
+
+## 2026-10-23 — Spring Boot 전환 설명서와 README 연결
+
+- 사용자 요청: 제안한 방향의 별도 설명서 작성, README 상단 요약·링크, 실제 코드·테스트·검증 기록에 근거한 설명과 변경 기록 갱신.
+- 변경 파일: [새 설명서](spring-boot-to-aspnet-core.md), [README](../README.md), [의사결정 ADR-012](decisions.md#adr-012--spring-boot-전환-설명서와-readme-상단-안내), 이 진행 기록. README에는 소개 직후 6줄만 추가하고 상세 설명을 별도 문서로 연결했다. API·테스트·Migration·배포 설정과 docs/init은 수정하지 않았다.
+- 내용: .NET/ASP.NET Core/EF Core의 역할, 프로젝트·패키지·외부 설정·C# 표현, DI 수명·비동기·취소·영속성·트랜잭션·요청 파이프라인·인증/인가·조회 비용을 설명했다. 경기 등록 흐름과 SQL Server CHECK 수정 사례를 코드·테스트·기존 실환경 보고서로 연결했다.
+- 증거 구분: 현재 Repository의 트랜잭션·fingerprint 비교 책임, 단일 SaveChanges의 원자성, LINQ count와 매개변수 SQL 페이지 조회, 서비스 직접 호출인 취소 테스트를 명시했다. 과거 소스 `71c8a47`의 전체 105개에 실DB 12개가 포함되고 EC2 HTTP 18개는 별도라는 집계를 유지했다.
+- 도구 환경: 셸 PATH에 dotnet이 없어 기존 `/Users/switch/.local/share/shooterrecords-dotnet` SDK를 검증 명령에만 추가했다. 시스템·셸 설정은 변경하지 않았다. 실행 명령은 `PATH="/Users/switch/.local/share/shooterrecords-dotnet:$PATH" bash infra/scripts/verify.sh artifacts/validation/spring-boot-guide`이며 종료 코드 0이다.
+
+| 실제 실행한 검증 | 결과 |
+|---|---|
+| `dotnet --version` | PASS: 기존 SDK 10.0.402 |
+| `dotnet restore --locked-mode` | PASS: 7개 프로젝트 복원 |
+| `dotnet build -warnaserror --no-restore` | PASS: 경고 0·오류 0 |
+| `dotnet test --no-build --filter 'Category!=Database'` | PASS: 단위 10 + 비DB 통합 83 = **93개**, 실패 0·skip 0 |
+| `dotnet format --verify-no-changes --no-restore` | PASS: 수정 필요 없음 |
+| Python 표준 라이브러리로 문서 링크·근거 대조 | PASS: 4개 문서의 상대 링크·앵커, 인용 테스트 메서드 6개, 기존 JSON의 105/12·동시 요청 10, DB 문자 사례 11개 확인 |
+| `git diff --check` 및 새 문서 공백 검사 | PASS |
+
+- 로컬 검증 로그는 Git 제외 경로 `artifacts/validation/spring-boot-guide/`의 `sdk.log`·`restore.log`·`build.log`·`test.log`·`format.log`와 `document-checks.json`에 저장했다. 위 93개는 이번 로컬 비DB 재실행 결과이고, 기존 105개 실환경 결과를 대체하거나 실DB 재실행으로 계산하지 않는다.
+- 별도 자기 리뷰: **PASS_WITH_RISKS**. 코드·테스트·검증 기록과 설명을 다시 대조하고 링크를 검사했다. Critical/High 발견 없음. DI·비동기·트랜잭션의 일대일 대응 오해, 실제 트랜잭션 구현 위치, 취소 테스트의 범위, 페이지 정렬과 스냅샷 일관성의 차이, 에이전트 활용의 표현을 검토했다. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다.
+- 남은 위험: 비교 대상 Spring 구현은 없으며 두 구현의 동등성을 검증하지 않았다. 과거 실DB/AWS 결과는 기존 기록을 인용했다. 이번 변경에서 `Category=Database` 테스트·AWS 배포·외부 서비스 운영 검증은 재실행하지 않았다. 구현이나 테스트가 바뀌면 새 설명서의 근거도 함께 갱신해야 한다.
+- 공개 반영 승인: 사용자의 후속 “커밋 푸시” 요청으로 위 4개 문서를 main에 커밋하고 origin/main에 푸시하는 범위가 승인되었다. 이 문서가 포함된 커밋 SHA와 원격 반영 결과는 Git 이력을 기준으로 확인한다.

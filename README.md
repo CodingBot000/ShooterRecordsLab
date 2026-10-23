@@ -4,6 +4,12 @@
 
 플레이어별 경기 이력·승패·킬/데스 통계와 랭킹을 제공하는 개인 백엔드 프로젝트입니다. 경기 등록의 멱등성, SQL Server 데이터 정합성, JWT 인가를 구현하고, **AWS EC2와 private RDS에 실제 배포해 동시성·인증·장애 복구까지 검증**했습니다.
 
+### Spring Boot 경험에서 ASP.NET Core로
+
+Java·Spring Boot에서 익힌 API 계층 분리, 생성자 주입, 트랜잭션과 테스트 원리를 ASP.NET Core·EF Core·SQL Server에 적용했습니다. DI 수명, 비동기 I/O·취소, 변경 추적과 트랜잭션 경계의 차이를 실제 코드·테스트·검증 기록과 연결해 정리했습니다.
+
+**[Spring Boot 개발자를 위한 ASP.NET Core 이해와 구현 근거 →](docs/spring-boot-to-aspnet-core.md)**
+
 [실환경 검증 보고서](docs/aws-validation.md) · [검증 결과 JSON](docs/validation/aws-validation/report.json) · [API 계약](docs/api-contract.md) · [설계와 의사결정](docs/decisions.md)
 
 ## 실제 AWS 배포·검증
