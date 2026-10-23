@@ -4,7 +4,7 @@
 
 ## 1. 배경과 목표
 
-넥슨 슈터플랫폼실 웹 애플리케이션 포지션에 대비해 .NET/C# 웹 백엔드 및 MSSQL 적응 역량을 직접 구현으로 검증한다. 실제 넥슨 서비스/코드/데이터와는 **전혀 관계없는 가상 게임 기록실**을 만든다. Spring Boot 경험의 재사용과 .NET 특유의 차이(DI 생명주기, Middleware, Task/async, LINQ/EF Core, DB 트랜잭션)를 중점 학습한다.
+게임 웹 백엔드 개발에 필요한 .NET/C# 및 MSSQL 활용 역량을 직접 구현으로 검증한다. **가상 데이터로 동작하는 게임 기록실**을 만들며, 실제 게임 서비스의 코드·계정·데이터는 사용하지 않는다. Spring Boot 경험의 재사용과 .NET 특유의 차이(DI 생명주기, Middleware, Task/async, LINQ/EF Core, DB 트랜잭션)를 중점 학습한다.
 
 ### 결과물
 
@@ -19,7 +19,7 @@
 
 ### 제외 범위
 
-- 실제 게임 클라이언트 연동, 넥슨 로그인/라이브 데이터, 아이템 결제·거래, 대규모 랭킹 서비스, 프론트엔드, MSA, Kafka, Redis, Kubernetes, .NET Framework.
+- 실제 게임 클라이언트 연동, 외부 게임 서비스 로그인·라이브 데이터 연동, 아이템 결제·거래, 대규모 랭킹 서비스, 프론트엔드, MSA, Kafka, Redis, Kubernetes, .NET Framework.
 - GitHub Actions 자동 배포는 마지막에 **선택 사항**. 도입하더라도 OIDC/승인 게이트를 우선한다.
 
 ## 2. 권장 기술 스택
@@ -30,7 +30,7 @@
 | HTTP API | ASP.NET Core Controllers | Spring MVC와 비교 학습 용이 |
 | 데이터 접근 | EF Core 10 SQL Server provider | ORM/LINQ/트랜잭션 학습 |
 | RDBMS | AWS RDS SQL Server 2022 Express | MSSQL 실습, 관리형 DB, AWS 활용 |
-| DB 추가 기술 | T-SQL Stored Procedure + 적정 인덱스 | 넥슨 공고 우대 역량 대응 |
+| DB 추가 기술 | T-SQL Stored Procedure + 적정 인덱스 | T-SQL 작성과 인덱스 설계·검증 역량 학습 |
 | 단위 테스트 | xUnit | 생태계 표준 중 하나 |
 | API 통합 | `WebApplicationFactory` | ASP.NET Core HTTP 통합 테스트 |
 | DB 통합 | 전용 RDS 개발/테스트 DB(격리) | MSSQL 고유 동작 확인 |
