@@ -212,5 +212,9 @@ P0~P2 및 P3 준비 기록의 NOT_RUN/미검증 표시는 해당 시점의 사�
 - 로컬 자동 검증: `PATH="/Users/switch/.local/share/shooterrecords-dotnet:$PATH" bash infra/scripts/verify.sh artifacts/validation/ci-setup-20261026` 종료 코드 0. SDK 10.0.402, locked restore 성공, warn-as-error build 경고 0/오류 0, 단위 10 + 비DB 통합 83 = **93 통과 / 실패 0 / skip 0**, format 확인 성공. 로그는 Git 제외 경로 `artifacts/validation/ci-setup-20261026/`의 sdk/restore/build/test/format.log에 있다.
 - 정적 확인: Ruby 표준 YAML parser로 workflow 구문·트리거·job/step 구조 확인, `bash -n infra/scripts/verify.sh`, `git diff --check` 통과. 전체 SHA 3개는 공식 액션 저장소의 실제 tag를 조회한 값이다. actionlint는 설치되어 있지 않아 실행하지 않았으며 YAML parse를 GitHub 실제 실행 성공으로 해석하지 않는다.
 - 별도 리뷰: **PASS_WITH_RISKS**. 권한/자격증명 지속 저장·PR 이벤트·문서 변경 필수 검사·script의 pipefail/첫 실패 중단·continue-on-error 부재·항상 로그 업로드·DB NOT_RUN 표시를 대조했다. 기존 테스트/assert·앱/API/SQL은 변경하지 않았으며 Critical/High 발견 없음. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다. GitHub 실제 실행·artifact·앱 ID 확인과 보호 설정은 후속 검증 대상이다.
-- GitHub 첫 실행·main 보호: **미실행**. 로컬 검증·리뷰 및 CI 성공 후 순서대로 수행한다.
+- 문서 링크 확인: Python 표준 라이브러리로 변경 문서 4개의 상대 파일 링크 **96개**, 누락 0개 확인. 결과는 `artifacts/validation/ci-setup-20261026/document-checks.json`에 보존했다.
+- GitHub 게시: CI와 관련 문서를 `dd478586f08787f4162bded9487c34f02fca4dda`로 커밋하고 `origin/main`에 정상 push했다. 앱/패키지/기존 테스트 변경 없이 게시했으며 작업 트리가 깨끗함을 확인했다.
+- GitHub 첫 실행: [CI run 40337051554](https://github.com/CodingBot000/ShooterRecordsLab/actions/runs/40337051554), event `push`, 대상 SHA `dd478586f08787f4162bded9487c34f02fca4dda`, job `verify` **SUCCESS**. Ubuntu 24.04.5의 실제 SDK는 **10.0.403**이며, 기존 `global.json`의 `latestPatch`가 허용한 같은 기능 밴드 패치다. 로컬 SDK 10.0.402와 구분하며 SDK 정책을 변경하지 않았다.
+- GitHub 실행 로그: locked restore, build 경고 0/오류 0, 단위 10 + 비DB 통합 83 = **93 통과 / 실패 0 / skip 0**, format 검사 및 업로드 단계 모두 성공. `verification-logs` artifact **5개 로그**, artifact ID `12656479560`, ZIP 1,320 bytes 생성과 다운로드 성공을 확인했다. 이 93개는 비DB 실행 수이며 실DB 12개를 포함하지 않는다.
+- 필수 검사 식별: 실제 check-run `121621329464`의 이름 `verify`, 발행 앱 `github-actions`/ID `15368`을 조회했다. `main` 보호 적용은 소유자 적용 범위 답변 대기 중이며 아직 성공으로 표시하지 않는다.
 - 실제 SQL Server/클라우드 배포 검증은 이번 CI 변경에서 **NOT_RUN**. 과거 실환경 검증 결과와 새 비DB 실행 결과를 합산하지 않는다.
