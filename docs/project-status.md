@@ -2,8 +2,8 @@
 
 ## 현재 상태
 
-- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 검증·공개 보고서, Spring Boot 전환 설명서 완료. GitHub Actions CI·main 보호 설정 진행 중.
-- 마지막 확인: 2026-10-26 KST — CI 구성 및 로컬 비DB 검증 갱신(실환경 검증 시각은 별도 보고서 기준).
+- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 검증·공개 보고서, Spring Boot 전환 설명서, GitHub Actions 비DB CI·소유자 포함 main 필수 검사 설정 완료.
+- 마지막 확인: 2026-10-26 KST — 실제 CI 성공 및 main 보호 적용·재조회 확인(실환경 검증 시각은 별도 보고서 기준).
 - 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 소스 커밋 `eee0b6f`을 GitHub에서 clone해 검증했다.
 - 환경: macOS 26.5 / Arm64 / SDK 10.0.402 / ASP.NET Core 10.0.13
 - AWS: 실제 EC2 Docker·private RDS SQL Server 2022 검증 결과 확보. 공개 자료에는 계정·주소·자원 식별자·비밀·원본 state/로그를 포함하지 않는다.
@@ -205,16 +205,19 @@ P0~P2 및 P3 준비 기록의 NOT_RUN/미검증 표시는 해당 시점의 사�
 
 ## 2026-10-26 — GitHub Actions CI와 main 보호 설정
 
-- 승인 범위: workflow 추가·커밋·푸시, GitHub 첫 실행 확인, `main`의 필수 검사 설정. 소유자 적용 여부는 사용자 답변 대기 중이며 해당 설정은 답변 후 적용한다.
+- 승인 범위: workflow 추가·커밋·푸시, GitHub 첫 실행 확인, `main`의 필수 검사 설정. 후속 질문에 사용자가 “소유자에게도 적용 (권장)”을 선택해 소유자 적용 범위를 확정했다.
 - 변경 파일: `.github/workflows/ci.yml`, README, 테스트 지침, ADR-013, 이 진행 기록. 기존 검증 스크립트를 재사용하고 앱·테스트·DB·AWS 설정은 변경하지 않는다.
-- 사전 확인: 작업 트리 깨끗함, 로컬/원격 `main` 일치(`d5a70ce`), 저장소 Public 및 Actions 활성화, 현재 `main` 보호·ruleset 없음, 기존 GitHub CLI의 관리 권한 확인. 비밀 값은 출력하지 않았다.
+- 사전 확인: 작업 트리 깨끗함, 로컬/원격 `main` 일치(`d5a70ce`), 저장소 Public 및 Actions 활성화, 적용 전 `main` 보호·ruleset 없음, 기존 GitHub CLI의 관리 권한 확인. 비밀 값은 출력하지 않았다.
 - 구현: `verify` job에서 기존 SDK 정책과 비DB 검증을 실행하고, 생성된 로그를 artifact로 보존하며 실제 DB 테스트 NOT_RUN을 실행 요약에 표시한다. 공식 액션 3개의 tag를 실제 조회하고 전체 SHA로 고정했다.
 - 로컬 자동 검증: `PATH="/Users/switch/.local/share/shooterrecords-dotnet:$PATH" bash infra/scripts/verify.sh artifacts/validation/ci-setup-20261026` 종료 코드 0. SDK 10.0.402, locked restore 성공, warn-as-error build 경고 0/오류 0, 단위 10 + 비DB 통합 83 = **93 통과 / 실패 0 / skip 0**, format 확인 성공. 로그는 Git 제외 경로 `artifacts/validation/ci-setup-20261026/`의 sdk/restore/build/test/format.log에 있다.
 - 정적 확인: Ruby 표준 YAML parser로 workflow 구문·트리거·job/step 구조 확인, `bash -n infra/scripts/verify.sh`, `git diff --check` 통과. 전체 SHA 3개는 공식 액션 저장소의 실제 tag를 조회한 값이다. actionlint는 설치되어 있지 않아 실행하지 않았으며 YAML parse를 GitHub 실제 실행 성공으로 해석하지 않는다.
-- 별도 리뷰: **PASS_WITH_RISKS**. 권한/자격증명 지속 저장·PR 이벤트·문서 변경 필수 검사·script의 pipefail/첫 실패 중단·continue-on-error 부재·항상 로그 업로드·DB NOT_RUN 표시를 대조했다. 기존 테스트/assert·앱/API/SQL은 변경하지 않았으며 Critical/High 발견 없음. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다. GitHub 실제 실행·artifact·앱 ID 확인과 보호 설정은 후속 검증 대상이다.
-- 문서 링크 확인: Python 표준 라이브러리로 변경 문서 4개의 상대 파일 링크 **96개**, 누락 0개 확인. 결과는 `artifacts/validation/ci-setup-20261026/document-checks.json`에 보존했다.
+- 별도 리뷰: **PASS_WITH_RISKS**. 권한/자격증명 지속 저장·PR 이벤트·문서 변경 필수 검사·script의 pipefail/첫 실패 중단·continue-on-error 부재·항상 로그 업로드·DB NOT_RUN 표시를 대조했다. 기존 테스트/assert·앱/API/SQL은 변경하지 않았으며 Critical/High 발견 없음. GitHub 실제 실행·artifact·앱 ID 확인과 보호 설정 재조회도 완료했다. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다.
+- 문서 링크 확인: Python 표준 라이브러리로 변경 문서 4개의 상대 파일 링크 **96개**, 누락 0개 확인. 결과는 `artifacts/validation/ci-setup-20261026/document-checks.json`에 보존했다. 소유자 선택·적용 결과를 반영한 후에도 96개 링크와 `git diff --check`를 재검사해 통과했으며 후속 결과는 `protection-document-checks.json`에 저장했다. 문서 설명을 실제 보호 설정과 별도 리뷰 패스로 대조했다.
 - GitHub 게시: CI와 관련 문서를 `dd478586f08787f4162bded9487c34f02fca4dda`로 커밋하고 `origin/main`에 정상 push했다. 앱/패키지/기존 테스트 변경 없이 게시했으며 작업 트리가 깨끗함을 확인했다.
 - GitHub 첫 실행: [CI run 40337051554](https://github.com/CodingBot000/ShooterRecordsLab/actions/runs/40337051554), event `push`, 대상 SHA `dd478586f08787f4162bded9487c34f02fca4dda`, job `verify` **SUCCESS**. Ubuntu 24.04.5의 실제 SDK는 **10.0.403**이며, 기존 `global.json`의 `latestPatch`가 허용한 같은 기능 밴드 패치다. 로컬 SDK 10.0.402와 구분하며 SDK 정책을 변경하지 않았다.
 - GitHub 실행 로그: locked restore, build 경고 0/오류 0, 단위 10 + 비DB 통합 83 = **93 통과 / 실패 0 / skip 0**, format 검사 및 업로드 단계 모두 성공. `verification-logs` artifact **5개 로그**, artifact ID `12656479560`, ZIP 1,320 bytes 생성과 다운로드 성공을 확인했다. 이 93개는 비DB 실행 수이며 실DB 12개를 포함하지 않는다.
-- 필수 검사 식별: 실제 check-run `121621329464`의 이름 `verify`, 발행 앱 `github-actions`/ID `15368`을 조회했다. `main` 보호 적용은 소유자 적용 범위 답변 대기 중이며 아직 성공으로 표시하지 않는다.
+- 필수 검사 식별: 실제 check-run `121621329464`의 이름 `verify`, 발행 앱 `github-actions`/ID `15368`을 조회했다. 결과 기록 커밋 `5a79c4712a74c9ad949bb58199aa429667671bc4`의 [CI run 40337692795](https://github.com/CodingBot000/ShooterRecordsLab/actions/runs/40337692795)도 **SUCCESS**임을 확인한 뒤 보호 설정을 적용했다.
+- 보호 설정 명령: `gh api --method PUT repos/CodingBot000/ShooterRecordsLab/branches/main/protection --input artifacts/validation/ci-setup-20261026/branch-protection-request.json`. 최초 요청에서 구식 `contexts`와 `checks`를 함께 보내 HTTP **422 FAIL**이 발생했다. `checks`만 전달하도록 형식을 수정한 재요청은 **PASS**였으며 승인한 검사·앱 ID·소유자 적용 범위는 바꾸지 않았다.
+- 보호 설정 재조회: `gh api repos/CodingBot000/ShooterRecordsLab/branches/main/protection` 결과의 필수 검사 `verify`/앱 `15368`, `enforce_admins=true`, `strict=false`, 강제 push·삭제 금지 값을 확인했다. 리뷰 승인 수·브랜치 최신화 강제는 추가하지 않았다. 입력·응답·재조회·최초 실패 기록은 Git 제외 경로 `artifacts/validation/ci-setup-20261026/branch-protection-*.json`에 저장했다. GitHub 연결 도구에는 보호 변경 기능이 없어 이미 확인한 관리 권한의 GitHub CLI를 사용했다.
+- 보호 적용 후 문서 반영은 작업 브랜치 `codex/ci-protection-evidence`와 PR을 통해 필수 검사 통과 후 진행한다. 기록 자체의 SHA·PR 실행·병합 상태는 Git 이력과 GitHub 상태를 기준으로 확인한다. 이번에는 의도적으로 실패하는 PR을 만들거나 main에 미검증 push를 시도하는 부정 시나리오 실험은 하지 않았으며, 차단 설정은 API 응답과 별도 재조회로 확인했다.
 - 실제 SQL Server/클라우드 배포 검증은 이번 CI 변경에서 **NOT_RUN**. 과거 실환경 검증 결과와 새 비DB 실행 결과를 합산하지 않는다.

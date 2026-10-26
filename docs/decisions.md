@@ -151,11 +151,12 @@
 
 ## ADR-013 — GitHub Actions 비DB CI와 main 필수 검사
 
-- 날짜: 2026-10-26 / 상태: 사용자 승인 범위 구현 중
+- 날짜: 2026-10-26 / 상태: 채택·CI 성공 및 main 보호 적용 확인
 - 사용자 승인: 제시한 1) workflow 추가·커밋·푸시, 2) Actions 첫 실행 확인, 3) `main` 필수 검사 설정을 모두 진행한다. AWS 배포·실DB 테스트·기능 계약 변경은 이 작업에 포함하지 않는다.
 - 결정: `.github/workflows/ci.yml`의 `verify` job이 `main` 대상 PR, `main` push, 수동 실행에서 기존 `infra/scripts/verify.sh`를 재사용한다. 로컬/CI 명령 중복과 서로 다른 성공 기준을 피한다. 문서 변경도 동일한 검사를 받도록 경로 필터는 추가하지 않는다.
 - SDK는 기존 `global.json`의 버전/rollForward 정책을 따른다. 공식 actions/checkout v7, setup-dotnet v6, upload-artifact v7의 실제 tag 참조를 조회해 전체 commit SHA로 고정했다. Microsoft/GitHub 공식 액션(MIT)을 사용하며 별도 테스트 프레임워크·NuGet 패키지는 추가하지 않는다. 대안인 명령 개별 복제·self-hosted runner·실DB CI는 현재 비DB 검증 범위에 필요하지 않다.
 - 권한은 `contents: read`, checkout의 `persist-credentials: false`로 설정한다. AWS/DB secret 및 쓰기 권한을 추가하지 않는다. 실패 시에도 생성된 검증 로그만 artifact로 저장하고 실제 DB 검증은 NOT_RUN으로 요약한다.
 - 보존 기간·실행 시간·동시 실행 한도·예산을 새 숫자로 확정하지 않는다. 별도 override 없이 기존 GitHub 설정을 사용하며 이를 사용자 승인 정책으로 해석하지 않는다.
-- `main` 보호의 필수 검사 이름은 실제 실행에서 확인한 `verify`이며 GitHub Actions 앱에 연결한다. 소유자 적용 여부는 사용자 답변 대기 중이다. 기존 규칙은 없음을 읽기 전용 조회로 확인했으며 보호 적용은 실제 CI 성공 후 진행한다.
+- 사용자 후속 선택: “소유자에게도 적용 (권장)”. `main`의 실제 보호 설정은 `verify`/GitHub Actions 앱 ID `15368`을 필수로 지정하고 `enforce_admins=true`로 소유자에게도 적용했다. 최초 규칙이 없음을 확인한 뒤 기존 `main`의 CI 성공을 확인하고 적용·재조회했다. 강제 push·브랜치 삭제는 허용하지 않는다. 요청된 필수 검사 범위에 맞춰 추가 리뷰 승인 수·브랜치 최신화 강제(`strict=false`)는 추가하지 않았다.
+- 이후 변경은 작업 브랜치와 PR에서 `verify`를 통과시킨 뒤 반영한다. 보호 적용 결과를 기록하는 문서 변경도 같은 경로를 사용한다. 관리 권한으로 보호 설정을 변경할 수 있다는 GitHub의 관리 경계 자체를 변경한 것은 아니다.
 - 실제 로컬/클라우드 CI 실행·검토·보호 설정 증거는 [진행 기록](project-status.md)에 별도로 남긴다. 코드 작성만으로 GitHub 실행·필수 검사 적용 성공을 주장하지 않는다.

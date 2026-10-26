@@ -146,7 +146,7 @@ DB 설정이 없으면 live는 `200`, ready는 `503`입니다. Development의 Op
 
 [CI workflow](.github/workflows/ci.yml)는 `main` 대상 PR의 생성·갱신, `main` push, 수동 실행에서 기존 `infra/scripts/verify.sh`를 호출합니다. `global.json`으로 SDK를 선택하고 locked restore → 경고를 오류로 처리하는 build → 비DB 테스트 → format을 검사합니다. 실패하면 해당 실행이 실패하며, 생성된 로그는 Actions 실행 화면의 `verification-logs`에서 다운로드할 수 있습니다.
 
-실제 DB 테스트는 이 CI에서 **NOT_RUN**이며 실행 요약에도 표시합니다. AWS·DB 자격증명이나 배포 작업은 포함하지 않습니다. 필수 검사 이름은 `verify`입니다. `main` 보호 설정과 실제 실행 근거는 [진행 기록](docs/project-status.md), 결과 리뷰·문서 반영 절차는 [테스트 지침](docs/testing-guidelines.md)을 따릅니다.
+실제 DB 테스트는 이 CI에서 **NOT_RUN**이며 실행 요약에도 표시합니다. AWS·DB 자격증명이나 배포 작업은 포함하지 않습니다. `main`은 GitHub Actions의 `verify` 검사를 필수로 요구하며 저장소 소유자에게도 적용합니다. 새 변경은 브랜치와 PR에서 검사를 통과시킨 뒤 반영합니다. 보호 설정과 실제 실행 근거는 [진행 기록](docs/project-status.md), 결과 리뷰·문서 반영 절차는 [테스트 지침](docs/testing-guidelines.md)을 따릅니다.
 
 ## 추가 문서
 
