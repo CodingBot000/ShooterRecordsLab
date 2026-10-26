@@ -2,8 +2,8 @@
 
 ## 현재 상태
 
-- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 검증·공개 보고서 완료. Spring Boot 전환 설명서와 README 상단 안내 추가 완료.
-- 마지막 확인: 2026-10-23 KST — 전환 설명서·로컬 비DB 검증 갱신(실환경 검증 시각은 별도 보고서 기준).
+- 현재 단계: 승인된 private EC2/RDS 범위의 실환경 검증·공개 보고서, Spring Boot 전환 설명서 완료. GitHub Actions CI·main 보호 설정 진행 중.
+- 마지막 확인: 2026-10-26 KST — CI 구성 및 로컬 비DB 검증 갱신(실환경 검증 시각은 별도 보고서 기준).
 - 현재 커밋: 저장소의 `git log`에서 확인(문서 자신이 포함된 커밋 SHA는 Git 이력을 기준으로 한다). 최초 소스 커밋 `eee0b6f`을 GitHub에서 clone해 검증했다.
 - 환경: macOS 26.5 / Arm64 / SDK 10.0.402 / ASP.NET Core 10.0.13
 - AWS: 실제 EC2 Docker·private RDS SQL Server 2022 검증 결과 확보. 공개 자료에는 계정·주소·자원 식별자·비밀·원본 state/로그를 포함하지 않는다.
@@ -202,3 +202,15 @@ P0~P2 및 P3 준비 기록의 NOT_RUN/미검증 표시는 해당 시점의 사�
 - 별도 자기 리뷰: **PASS_WITH_RISKS**. 코드·테스트·검증 기록과 설명을 다시 대조하고 링크를 검사했다. Critical/High 발견 없음. DI·비동기·트랜잭션의 일대일 대응 오해, 실제 트랜잭션 구현 위치, 취소 테스트의 범위, 페이지 정렬과 스냅샷 일관성의 차이, 에이전트 활용의 표현을 검토했다. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다.
 - 남은 위험: 비교 대상 Spring 구현은 없으며 두 구현의 동등성을 검증하지 않았다. 과거 실DB/AWS 결과는 기존 기록을 인용했다. 이번 변경에서 `Category=Database` 테스트·AWS 배포·외부 서비스 운영 검증은 재실행하지 않았다. 구현이나 테스트가 바뀌면 새 설명서의 근거도 함께 갱신해야 한다.
 - 공개 반영 승인: 사용자의 후속 “커밋 푸시” 요청으로 위 4개 문서를 main에 커밋하고 origin/main에 푸시하는 범위가 승인되었다. 이 문서가 포함된 커밋 SHA와 원격 반영 결과는 Git 이력을 기준으로 확인한다.
+
+## 2026-10-26 — GitHub Actions CI와 main 보호 설정
+
+- 승인 범위: workflow 추가·커밋·푸시, GitHub 첫 실행 확인, `main`의 필수 검사 설정. 소유자 적용 여부는 사용자 답변 대기 중이며 해당 설정은 답변 후 적용한다.
+- 변경 파일: `.github/workflows/ci.yml`, README, 테스트 지침, ADR-013, 이 진행 기록. 기존 검증 스크립트를 재사용하고 앱·테스트·DB·AWS 설정은 변경하지 않는다.
+- 사전 확인: 작업 트리 깨끗함, 로컬/원격 `main` 일치(`d5a70ce`), 저장소 Public 및 Actions 활성화, 현재 `main` 보호·ruleset 없음, 기존 GitHub CLI의 관리 권한 확인. 비밀 값은 출력하지 않았다.
+- 구현: `verify` job에서 기존 SDK 정책과 비DB 검증을 실행하고, 생성된 로그를 artifact로 보존하며 실제 DB 테스트 NOT_RUN을 실행 요약에 표시한다. 공식 액션 3개의 tag를 실제 조회하고 전체 SHA로 고정했다.
+- 로컬 자동 검증: `PATH="/Users/switch/.local/share/shooterrecords-dotnet:$PATH" bash infra/scripts/verify.sh artifacts/validation/ci-setup-20261026` 종료 코드 0. SDK 10.0.402, locked restore 성공, warn-as-error build 경고 0/오류 0, 단위 10 + 비DB 통합 83 = **93 통과 / 실패 0 / skip 0**, format 확인 성공. 로그는 Git 제외 경로 `artifacts/validation/ci-setup-20261026/`의 sdk/restore/build/test/format.log에 있다.
+- 정적 확인: Ruby 표준 YAML parser로 workflow 구문·트리거·job/step 구조 확인, `bash -n infra/scripts/verify.sh`, `git diff --check` 통과. 전체 SHA 3개는 공식 액션 저장소의 실제 tag를 조회한 값이다. actionlint는 설치되어 있지 않아 실행하지 않았으며 YAML parse를 GitHub 실제 실행 성공으로 해석하지 않는다.
+- 별도 리뷰: **PASS_WITH_RISKS**. 권한/자격증명 지속 저장·PR 이벤트·문서 변경 필수 검사·script의 pipefail/첫 실패 중단·continue-on-error 부재·항상 로그 업로드·DB NOT_RUN 표시를 대조했다. 기존 테스트/assert·앱/API/SQL은 변경하지 않았으며 Critical/High 발견 없음. 구현과 동일 세션의 별도 패스로 독립된 제3자 리뷰는 아니다. GitHub 실제 실행·artifact·앱 ID 확인과 보호 설정은 후속 검증 대상이다.
+- GitHub 첫 실행·main 보호: **미실행**. 로컬 검증·리뷰 및 CI 성공 후 순서대로 수행한다.
+- 실제 SQL Server/클라우드 배포 검증은 이번 CI 변경에서 **NOT_RUN**. 과거 실환경 검증 결과와 새 비DB 실행 결과를 합산하지 않는다.

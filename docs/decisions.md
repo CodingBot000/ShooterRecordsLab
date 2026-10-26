@@ -148,3 +148,14 @@
 - 증거 해석: 과거 검증 소스 `71c8a47`의 전체 105개에 실DB 12개가 포함되고 EC2 HTTP 18개는 별도라는 구분을 유지한다. SQL Server CHECK 수정은 실제 DB 검증의 필요성을 보여주는 사례로 설명한다. Spring 비교 구현의 동등성·상용 운영 경력·독립 감사의 근거로 사용하지 않는다.
 - 한계·유지보수: 설명은 현재 코드와 연결되므로 해당 구현이나 테스트가 바뀌면 함께 갱신한다. 코딩 에이전트 활용과 동일 세션 검토의 독립성 한계를 명시한다. 이번 변경은 문서에 한정하며 원본 docs/init, API·DB·배포 설정과 기존 실환경 보고서는 수정하지 않는다.
 - 변경 파일: README, 새 설명서, 이 의사결정 기록, project-status. 검증 명령과 실제 결과는 [진행 기록](project-status.md)에 남긴다.
+
+## ADR-013 — GitHub Actions 비DB CI와 main 필수 검사
+
+- 날짜: 2026-10-26 / 상태: 사용자 승인 범위 구현 중
+- 사용자 승인: 제시한 1) workflow 추가·커밋·푸시, 2) Actions 첫 실행 확인, 3) `main` 필수 검사 설정을 모두 진행한다. AWS 배포·실DB 테스트·기능 계약 변경은 이 작업에 포함하지 않는다.
+- 결정: `.github/workflows/ci.yml`의 `verify` job이 `main` 대상 PR, `main` push, 수동 실행에서 기존 `infra/scripts/verify.sh`를 재사용한다. 로컬/CI 명령 중복과 서로 다른 성공 기준을 피한다. 문서 변경도 동일한 검사를 받도록 경로 필터는 추가하지 않는다.
+- SDK는 기존 `global.json`의 버전/rollForward 정책을 따른다. 공식 actions/checkout v7, setup-dotnet v6, upload-artifact v7의 실제 tag 참조를 조회해 전체 commit SHA로 고정했다. Microsoft/GitHub 공식 액션(MIT)을 사용하며 별도 테스트 프레임워크·NuGet 패키지는 추가하지 않는다. 대안인 명령 개별 복제·self-hosted runner·실DB CI는 현재 비DB 검증 범위에 필요하지 않다.
+- 권한은 `contents: read`, checkout의 `persist-credentials: false`로 설정한다. AWS/DB secret 및 쓰기 권한을 추가하지 않는다. 실패 시에도 생성된 검증 로그만 artifact로 저장하고 실제 DB 검증은 NOT_RUN으로 요약한다.
+- 보존 기간·실행 시간·동시 실행 한도·예산을 새 숫자로 확정하지 않는다. 별도 override 없이 기존 GitHub 설정을 사용하며 이를 사용자 승인 정책으로 해석하지 않는다.
+- `main` 보호의 필수 검사 이름은 실제 실행에서 확인한 `verify`이며 GitHub Actions 앱에 연결한다. 소유자 적용 여부는 사용자 답변 대기 중이다. 기존 규칙은 없음을 읽기 전용 조회로 확인했으며 보호 적용은 실제 CI 성공 후 진행한다.
+- 실제 로컬/클라우드 CI 실행·검토·보호 설정 증거는 [진행 기록](project-status.md)에 별도로 남긴다. 코드 작성만으로 GitHub 실행·필수 검사 적용 성공을 주장하지 않는다.

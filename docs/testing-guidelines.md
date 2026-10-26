@@ -63,6 +63,16 @@
 
 DB 테스트 메서드/클래스에는 xUnit `[Trait("Category", "Database")]`를 명시한다. 런너 필터 동작은 최초 테스트 생성 시 실증한다. CI의 기본 job은 DB 테스트를 포함하지 않고, DB integration job이 실행되지 않았음을 표시한다.
 
+### GitHub Actions CI
+
+- 정의: [ci.yml](../.github/workflows/ci.yml). `main` 대상 `pull_request`, `main`의 `push`, `workflow_dispatch`에서 실행한다. 필수 검사로 지정할 job 이름은 `verify`다. 경로 필터를 두지 않아 문서 변경 PR에서도 필수 검사가 생성된다.
+- GitHub-hosted Ubuntu runner에 `global.json`의 SDK를 준비한 뒤 `bash infra/scripts/verify.sh artifacts/validation/ci`를 실행한다. 비DB 게이트와 실패 시 중단 동작은 로컬과 공유한다.
+- 성공/실패에 관계없이 생성된 `*.log`만 `verification-logs` artifact로 업로드한다. SDK 준비 전에 실패하면 검증 로그가 없을 수 있으므로 Actions step 로그도 확인한다. 보존 기간·실행 시간·동시 실행 제한은 별도 정책을 추가하지 않고 기존 GitHub 설정을 따른다.
+- 실제 SQL Server 테스트는 실행하지 않으며 job summary에 **Database tests: NOT_RUN**을 표시한다. 이 결과를 SQL Server 정합성·AWS 배포 검증으로 확대하지 않는다.
+- 권한은 `contents: read`, checkout 자격증명 지속 저장은 비활성이다. 공식 액션은 확인한 전체 commit SHA로 고정하며, SHA 갱신 시 해당 공식 저장소와 변경 내용을 확인한다. 비밀·DB 연결·클라우드 배포는 추가하지 않는다.
+- 완료 절차: Actions의 실행 URL·대상 SHA·성공/실패·실제 테스트 수·artifact를 확인 → `review-guidelines.md`에 따른 별도 리뷰 → 필요한 수정과 재검증 → `project-status.md`에 결과·한계·다음 단계 기록. 결정이나 계약이 바뀌면 해당 문서도 갱신한다. CI 성공 자체가 결과 리뷰·문서 반영 완료를 뜻하지 않는다.
+- `main` 보호는 실제 `verify` 실행에서 확인한 GitHub Actions 앱의 검사만 필수로 지정한다. 소유자 적용 여부와 실제 적용/조회 결과는 의사결정·진행 기록에 남긴다. 필수 검사 이름 변경 시 보호 설정도 함께 검토한다.
+
 ## 6. P3 이전·이후의 통과 의미
 
 - **P0~P2:** build, unit, fake HTTP integration 성공 가능. DB 통합 테스트는 `미실행 — 아직 AWS 승인/DB 없음`으로 기록.
